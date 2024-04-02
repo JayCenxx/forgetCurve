@@ -20,6 +20,7 @@ const SearchBar = () => {
         className=" flex items-center absolute inset-y-0  pl-2 "
         // when the search icon is clicked, it ll expand the search bar
         onClick={() => setIsExpanded(true)}>
+            {/* when hover your mouse over, the background ll turn gray cicle, and mouse turn into index-finger sticking out */}
         <div className=" w-9 h-9 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200">
           <FiSearch className="text-gray-600 w-5 h-5  " />
         </div>
@@ -29,7 +30,7 @@ const SearchBar = () => {
       <input
       // Attach the ref to the input
         ref={inputRef} 
-        className={`pl-12 pr-3 py-1 border border-gray-300 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 
+        className={`pl-12  py-2  rounded-full transition-all delay-100 duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 
         ${ isExpanded ? "w-10/12" : "hidden"}  `}
         placeholder="Search"
         // when you click somewhere else, the search bar will unshrink
