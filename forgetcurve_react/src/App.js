@@ -1,10 +1,12 @@
-
-import Header from "./components/Header";
+import MainPage from "./components/MainPage";
+import Header from "./components/header/Header";
 
 function App() {
   return (
     <>
-      <Header></Header>
+      <Header />
+      <MainPage />
+      
     </>
   );
 }
