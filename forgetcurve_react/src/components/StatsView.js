@@ -34,6 +34,7 @@ for (let i = 0; i < 50; i++) {
 
 //Notes:
 // This uses the chart.css library to format chart
+// Tailwind CSS classes are at the bottom of module. Edit to change appearance.
 // Issues to resolve later:
 // How to display text for each card category:
 // - Since each bar has a limited width/ height, the label text can be cut off.
@@ -162,21 +163,21 @@ const StatsView = (props) => {
     )
 }
 
-const boxStyle = {
+//styles/classNames:
+const boxStyle = { //The overall container
     container: "grid gap-x-4 bg-white shadow-lg rounded-lg place-item-start w-full max-w-6xl p-2 grid-col-1  sm:grid-cols-2",
-    caption: ""
 };
 
-const chartStyle = {
-    container: "bg-white border rounded  p-2",//w-full max-w-96
+const chartStyle = { //The graph
+    container: "bg-white border rounded  p-2",
     table: "charts-css column show-heading show-labels show-primary-axis show-4-secondary-axes dav-19 data-spacing-1 ros-85",
     caption: "",
     xLabel: ` text-nowrap truncate rotate-[-25deg]`,
     yLabel: "-rotate-90 absolute top-40 -left-8 ",
 };
 
-const tableStyle = {
-    container: "bg-white rounded", //w-full max-w-96
+const tableStyle = { //The table
+    container: "bg-white rounded",
     table: "border-collapse w-full",
     cell: "border px-2 py-1"
 };
