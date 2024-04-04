@@ -12,7 +12,8 @@ const ONE_MINUTE = 60000; //milliseconds
 
 //*********************************************
 //Testing data
-const randomWords = ["seat", "curtain", "deer", "office", "rest", "bread", "route", "bit", "order", "selection", "birthday", "owl", "question", "glove", "feeling", "zinc", "finger", "mice", "camp", "books"]
+const randomWords = ["seat", "curtain", "deer", "office", "rest", "bread", "route", "bit", "order", "reflection", "birthday", "owl", "question", "glove", "feeling", "zinc", "finger", "mice", "camp", "books"]
+// const randomWords = ["AAAAAAAdfasdfasdfasdfasdfasdfasdXXXXfasdfsadfsadfsadfsafsadfsadfsdftBBBBBBB",] //testing a really long word
 const dummyData = {
   userDecks: []
 };
@@ -46,8 +47,8 @@ for (let i = 0; i < 50; i++) {
 const StatsView = (props) => {
 
   const {
-    showLimit = 10, //Max num of graphs/rows to show
-    userInfo = dummyData, //userInfo can be passed as props or using global state
+    showLimit = 6, //Max num of graphs/rows to show
+    userInfo = dummyData, 
   } = props;
 
   //Reducer to get the highest number in range
@@ -63,7 +64,7 @@ const StatsView = (props) => {
   const decksToDisplay = (() => {
     //Replace with deck selecting logic...
     return userInfo.userDecks;
-  })()
+  })();
 
   return (
     <div id={"theContainer"} className={boxStyle.container}>
@@ -73,7 +74,7 @@ const StatsView = (props) => {
         <div className={chartStyle.yLabel}>
           Times Reviewed
         </div>
-        <table id={"statsgraph"} className={chartStyle.table} >
+        <table id={"statsgraph"} className={chartStyle.table}  >
           {/* <thead> doesn't really matter for chart, but will display if chart-css is disabled, so I included it */}
           <caption className={chartStyle.caption}>
             Recent Reviews
@@ -98,8 +99,17 @@ const StatsView = (props) => {
               }
               return (
                 <tr key={idx}>
-                  <th className={chartStyle.xLabel} scope="row">{deck.name}</th>
-                  <td style={{ '--size': deck.numReviews / maxRange }}>
+                  <th className={chartStyle.xLabel} style={{ marginRight: '10px' }} scope="row">
+                    <span className="tooltip">
+                      {deck.name}
+                    </span>
+                    {deck.name}
+                  </th>
+                  <td style={{ '--size': deck.numReviews / maxRange, }}>
+                    <span className="tooltip">
+                      {deck.name}
+                    </span>
+
                     <span>
                       {deck.numReviews}
                     </span>
@@ -172,7 +182,7 @@ const chartStyle = { //The graph
   container: "bg-white border rounded  p-2",
   table: "charts-css column show-heading show-labels show-primary-axis show-4-secondary-axes dav-19 data-spacing-1 ros-85",
   caption: "",
-  xLabel: ` text-nowrap truncate rotate-[-25deg]`,
+  xLabel: `truncate`,
   yLabel: "-rotate-90 absolute top-40 -left-8 ",
 };
 
