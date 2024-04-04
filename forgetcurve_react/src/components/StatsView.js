@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as styles from "charts.css"; // allows the chart to work
 
+
 //For reference
 const ONE_YEAR = 31536000000; //milliseconds
 const ONE_MONTH = 2592000000; //milliseconds
@@ -9,7 +10,9 @@ const ONE_HOUR = 3600000; //milliseconds
 const ONE_MINUTE = 60000; //milliseconds
 
 
+//*********************************************
 //Testing data
+const randomWords = ["seat", "curtain", "deer", "office", "rest", "bread", "route", "bit", "order", "selection", "birthday", "owl", "question", "glove", "feeling", "zinc", "finger", "mice", "camp", "books"]
 const dummyData = {
     userDecks: []
 };
@@ -18,26 +21,47 @@ for (let i = 0; i < 50; i++) {
     dummyData.userDecks.push(
         {
             id: i,
-            name: "Language" + i,
+            name: randomWords[Math.floor(Math.random() * randomWords.length)],
             cards: ["some", "array", "of", "cards"],
-            nextReview: 1712176490804 + (ONE_DAY * i), //date
+            nextReview: Date.now() + (ONE_DAY * i), //date
             lastReview: 1234, //date
-            numReviews: i,
+            numReviews: Math.floor(Math.random() * 50),
 
         }
     )
 };
+//********************************************** */
 
-// Use Math.max to get range of reviews
-
+//Notes:
+// This uses the chart.css library to format chart
+// Issues to resolve later:
+// How to display text for each card category:
+// - Since each bar has a limited width/ height, the label text can be cut off.
+//   Suggestions: Display text vertically/Display text in bar/Omit text, Color match bars with table on the right
+//
 const StatsView = (props) => {
 
     const {
-        showLimit = 8,
+        showLimit = 10, //Max num of graphs/rows to show
+        userInfo = dummyData, //userInfo can be passed as props or using global state
     } = props;
 
     // const [showLimit, setShowLimit] = useState(5);
-    const [maxRange, setMaxRange] = useState(10);
+
+    //Reducer to get the highest number in range
+    //Reducer will only evaluate up to the showLimit
+    const [maxRange, setMaxRange] = useState(Math.max(10, userInfo.userDecks.reduce((max, obj, idx) => {
+        if (idx > showLimit) {
+            return max
+        }
+        return Math.max(max, obj.numReviews)
+    }, 0)));
+
+    //Function to specify which decks and what order are displayed:
+    const decksToDisplay = (()=>{
+        //Replace with deck selecting logic...
+        return userInfo.userDecks;
+    })()
 
     return (
         <div id={"theContainer"} className={boxStyle.container}>
@@ -48,8 +72,10 @@ const StatsView = (props) => {
                     Times Reviewed
                 </div>
                 <table id={"statsgraph"} className={chartStyle.table} >
-                    {/* thead doesn't really matter for chart, but will display if chart-css is disabled */}
-                    <caption className={chartStyle.caption}>Title</caption>
+                    {/* <thead> doesn't really matter for chart, but will display if chart-css is disabled, so I included it */}
+                    <caption className={chartStyle.caption}>
+                        Recent Reviews
+                    </caption>
                     <thead>
                         <tr>
                             <th className="border">
@@ -64,15 +90,15 @@ const StatsView = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {dummyData.userDecks.map((deck, idx) => {
+                        {decksToDisplay.map((deck, idx) => {
                             if (idx > showLimit) return null;
                             return (
                                 <tr key={idx}>
                                     <th className={chartStyle.xLabel} scope="row">{deck.name}</th>
                                     <td style={{ '--size': deck.numReviews / maxRange }}>
-                                        <span className="absolute top-3 truncate w-4">
+                                        {/* <span className="absolute top-3 truncate w-4">
                                             {deck.name}
-                                        </span>
+                                        </span> */}
                                         <span>
                                             {deck.numReviews}
                                         </span>
@@ -103,7 +129,7 @@ const StatsView = (props) => {
 
                     </thead>
                     <tbody>
-                        {dummyData.userDecks.map((deck, idx) => {
+                        {decksToDisplay.map((deck, idx) => {
                             if (idx > showLimit) return;
                             const timeTillNextReview = Math.floor((deck.nextReview - Date.now()) / ONE_DAY);
                             return (
@@ -114,7 +140,7 @@ const StatsView = (props) => {
                                     <td className={tableStyle.cell + " text-center"}>
                                         {deck.numReviews}
                                     </td>
-                                    <td className={tableStyle.cell}>
+                                    <td className={tableStyle.cell + " text-center"}>
                                         {
                                             timeTillNextReview === 0 ?
                                                 'Today' :
