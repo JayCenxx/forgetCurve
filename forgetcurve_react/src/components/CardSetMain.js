@@ -14,13 +14,13 @@ console.log(sampleJson);
       </section>
 
       {/* the Card List , affect the outside border & setup rules for the grid */}
-      <main className="border-2 border-gray-200 rounded-lg p-4 grid grid-cols-1 sm:grid-cols-2 ">
+      <section className="border-2 border-gray-200 rounded-lg p-4 grid grid-cols-1 sm:grid-cols-2 ">
         {sampleJson.map((card, index) => {
           return (
             // affect the outside of the card
-            <section key={index} className=" rounded shadow m-3 ">
+            <div key={index} className=" rounded shadow m-3 ">
               {/* affect inside each card */}
-              <section className="flex p-3 justify-between items-center  ">
+              <div className="flex p-3 justify-between items-center  ">
                 <h3 className="text-lg font-semibold cursor-pointer hover:underline ">
                   {card.subject}
                 </h3>
@@ -28,11 +28,11 @@ console.log(sampleJson);
                   <p>Review in:</p>
                   <p className="text-center"> {card.reviewTime}</p>
                 </div>
-              </section>
-            </section>
+              </div>
+            </div>
           );
         })}
-      </main>
+      </section>
 
       {/* arrow key to move to next page */}
       <ArrowButtons></ArrowButtons>
