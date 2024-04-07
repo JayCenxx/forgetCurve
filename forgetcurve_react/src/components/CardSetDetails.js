@@ -1,7 +1,7 @@
 import { buttonStyle } from "../style/styles";
 import { FaStar } from "react-icons/fa";
 import ThreedotsButton from "./buttons/ThreedotsButton";
-import DropdownMenu from "./DropdownMenu";
+
 
 const CardSetDetails = () => {
 
@@ -14,7 +14,7 @@ const CardSetDetails = () => {
         <div className="basis-4/12"></div>
         {/* 3 dot button */}
        <ThreedotsButton></ThreedotsButton>
-       <DropdownMenu></DropdownMenu>
+
       </section>
 
       {/* stars */}
