@@ -4,7 +4,8 @@ import ThreedotsButton from "./buttons/ThreedotsButton";
 
 const CardSetDetails = () => {
   return (
-    <main className="bg-white shadow-lg rounded-xl p-4">
+    <main className="bg-white shadow-lg rounded-xl ">
+      
       {/* title */}
       <section className="flex items-center justify-between w-full">
         <div className="w-1/3"></div>
@@ -42,12 +43,13 @@ const CardSetDetails = () => {
       </section>
 
       {/* browse or review button */}
-      <section className="flex items-center justify-center mt-4">
+      <section className="flex items-center justify-center py-4">
         {/*Login Button */}
         <button className={`${buttonStyle.pill_container} `}>
           <div className={`${buttonStyle.pill_span} `}>Browse</div>
         </button>
       </section>
+
     </main>
   );
 };

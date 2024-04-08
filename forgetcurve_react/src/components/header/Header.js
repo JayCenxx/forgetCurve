@@ -19,13 +19,13 @@ const Header = () => {
       {/* button collection , buttons ll be hidden VP<640px, else it ll display*/}
       <section className="px-6 sm:flex hidden items-center justify-start space-x-3  ">
         {/* My Set button */}
-        <button className={`${buttonStyle.pill_container} ${buttonStyle.colorRing}`}>
+        <button className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2`}>
           <FaLayerGroup className="text-lg" />
           <span className={buttonStyle.pill_span}>My Sets</span>
         </button>
 
         {/* Add Button */}
-        <button className={`${buttonStyle.pill_container} ${buttonStyle.colorRing}`}>
+        <button className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2`}>
           <FiPlus className="text-lg " />
           <span className={buttonStyle.pill_span}>New</span>
         </button>
@@ -38,7 +38,7 @@ const Header = () => {
 
       <section className="flex items-center space-x-3">
         {/*Login Button */}
-        <button className={`${buttonStyle.round_container} ${buttonStyle.colorRing}`}>
+        <button className={`${buttonStyle.round_container} ${buttonStyle.colorRing} `}>
           <span className={`${buttonStyle.round_span}`}>Login</span>
         </button>
       </section>
