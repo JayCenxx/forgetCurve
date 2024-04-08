@@ -28,7 +28,7 @@ const ThreedotsButton = () => {
         <FaEllipsisV className="text-gray-800" />
       </button>
       {isOpen && (
-        <div className="absolute -translate-x-8 w-max py-2  bg-white rounded-md shadow-xl z-10">
+        <div className="absolute right-0 w-max py-2  bg-white rounded-md shadow-xl z-10">
           <a href="#" className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100">Edit</a>
           <a href="#" className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100">Rename</a>
           <a href="#" className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100">Share</a>
