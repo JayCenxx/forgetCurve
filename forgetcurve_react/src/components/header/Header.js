@@ -4,16 +4,22 @@ import { FaLayerGroup } from "react-icons/fa";
 import SearchBar from "./SearchBar";
 import CollapsibleMenu from "./CollapsibleMenu";
 import { buttonStyle } from "../../style/styles";
-
+import { useNavigate } from 'react-router-dom';
 const Header = () => {
+const navigate  = useNavigate();
+
+  const goHomeClick = () => {
+    navigate ('/');
+  };
+
   return (
     <main className="bg-white shadow flex justify-between items-center px-6 py-4">
       <CollapsibleMenu />
 
       {/* home title  */}
       <section className="flex items-center space-x-3">
-        <h1 className="text-xl font-bold text-blue-600">Unitycard</h1>
-        {/* ... Other elements like menu or logo */}
+        <h1 className="text-xl font-bold text-blue-600 cursor-pointer" onClick={goHomeClick}>Unitycard</h1>
+      
       </section>
 
       {/* button collection , buttons ll be hidden VP<640px, else it ll display*/}

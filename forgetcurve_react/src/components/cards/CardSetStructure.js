@@ -7,11 +7,11 @@ import { BiDownArrow } from "react-icons/bi";
 import ThreedotsButton from "../buttons/ThreedotsButton";
 import { useState } from "react";
 
-const CardContainer = () => {
+const CardSetStructure = () => {
   return (
     <>
       {/* physical button */}
-      <section className="flex items-center justify-start space-x-2  w-9/12 mx-auto py-2 border-b-2 border-gray-300">
+      <section className="flex items-center justify-start space-x-2  w-9/12 mx-auto py-2 border-b-2 border-gray-300 m-7">
         <div className="flex space-x-2 whitespace-nowrap">
         <button
           className={`${cardButtonStyle.card_Container} ${cardButtonStyle.colorRing}`}
@@ -38,11 +38,7 @@ const CardContainer = () => {
         <div className="flex-grow"/>
         <div className="flex">
 
-   
-
         <ThreedotsButton Icon={BiDownArrow}  Name={"Sort"} >
-
-
         </ThreedotsButton>
 
         </div>
@@ -75,4 +71,4 @@ const CardContainer = () => {
   );
 };
 
-export default CardContainer;
+export default CardSetStructure;
