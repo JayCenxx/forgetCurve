@@ -20,7 +20,7 @@ const ThreedotsButton = () => {
   }, []);
 
   return (
-    <div className="relative" ref={ref}>
+    <main className="relative" ref={ref}>
       <button
         onClick={() => setIsOpen(prev => !prev)}
         className="p-2 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
@@ -34,7 +34,7 @@ const ThreedotsButton = () => {
           <a href="#" className="block px-4 py-2 text-md text-gray-700 hover:bg-gray-100">Share</a>
         </div>
       )}
-    </div>
+    </main>
   );
 };
 

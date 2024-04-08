@@ -1,4 +1,5 @@
 // App.js
+import CardContainer from "./components/CardContainer";
 import CardSetDetails from "./components/CardSetDetails";
 import CardSetMain from "./components/CardSetMain";
 import Header from "./components/header/Header";
@@ -8,7 +9,7 @@ function App() {
     <>
       <Header />
       <CardSetMain/>
-   <CardSetDetails/>
+    <CardContainer/>
     </>
   );
 }

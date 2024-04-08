@@ -6,12 +6,11 @@ import ThreedotsButton from "./buttons/ThreedotsButton";
 const CardSetDetails = () => {
 
   return (
-    <main className="bg-white shadow-lg rounded-xl p-4 max-w-xs w-full ">
+    <main className="bg-white shadow-lg rounded-xl ">
       {/* title */}
-      <section className="flex flex-row ">
-        <div className="basis-5/12"></div>
-        <div className="text-md font-semibold text-gray-900">Science</div>
-        <div className="basis-4/12"></div>
+      <section className="grid grid-cols-12">
+        <div className="col-start-6 text-md font-semibold text-gray-900">Science</div>
+        <div className="col-start-11"></div>
         {/* 3 dot button */}
        <ThreedotsButton></ThreedotsButton>
 

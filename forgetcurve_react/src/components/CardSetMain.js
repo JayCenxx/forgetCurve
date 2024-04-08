@@ -6,7 +6,7 @@ const CardSetMain = () => {
 console.log(sampleJson);
 
   return (
-    <main className="m-7 max-w-5xl mx-auto">
+    <main className="m-7 max-w-4xl mx-auto">
       {/* Cart Set & View More Titles */}
       <section className="flex items-center mb-4 space-x-7">
         <h2 className="text-xl font-bold ml-5">Card Set</h2>
