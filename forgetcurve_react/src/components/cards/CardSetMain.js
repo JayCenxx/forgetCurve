@@ -1,16 +1,19 @@
 import  {sampleJson}  from "../../utils/sampleJson";
 import ArrowButtons from "../buttons/ArrowButton";
-
-
+import { useNavigate } from 'react-router-dom';
 const CardSetMain = () => {
-console.log(sampleJson);
+  const navigate  = useNavigate();
+
+  const handleViewMoreClick = () => {
+    navigate ('/CardSetStructure');
+  };
 
   return (
     <main className="m-7 max-w-4xl mx-auto">
       {/* Cart Set & View More Titles */}
       <section className="flex items-center mb-4 space-x-7">
         <h2 className="text-xl font-bold ml-5">Card Set</h2>
-        <button className="text-black-500 hover:underline ">View more</button>
+        <button className="text-black-500 hover:underline"  onClick={handleViewMoreClick}>View more</button>
       </section>
 
       {/* the Card List , affect the outside border & setup rules for the grid */}
