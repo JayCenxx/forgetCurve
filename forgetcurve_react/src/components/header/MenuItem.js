@@ -6,7 +6,6 @@ const MenuItem = ({ icon, text }) => {
           {icon}
           <span className="ml-3">{text}</span>
         </div>
-        {/* <FiChevronRight /> You can use any right arrow icon here */}
       </main>
     );
   };
