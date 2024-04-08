@@ -1,5 +1,5 @@
 import { FiPlus } from "react-icons/fi";
-import { buttonStyle } from "../../style/styles";
+import { buttonStyle, cardButtonStyle } from "../../style/styles";
 import CardSetDetails from "./CardDetails";
 import { FaRegHandPointer } from "react-icons/fa";
 import { MdDeleteOutline,MdOutlineDriveFileRenameOutline } from "react-icons/md";
@@ -14,25 +14,25 @@ const CardContainer = () => {
       <section className="flex items-center justify-start space-x-2  w-9/12 mx-auto py-2 border-b-2 border-gray-300">
         <div className="flex space-x-2 whitespace-nowrap">
         <button
-          className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2 shadow-md`}
+          className={`${cardButtonStyle.card_Container} ${cardButtonStyle.colorRing}`}
         >
           <FiPlus className="text-lg " />
-          <span className={`${buttonStyle.pill_span} md:block hidden`}>New Set</span>
+          <span className={`${cardButtonStyle.card_span} `}>New Set</span>
         </button>
         <button
-          className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2 shadow-md`}>
+          className={`${cardButtonStyle.card_Container} ${cardButtonStyle.colorRing}`}>
           <FaRegHandPointer className="text-lg " />
-          <span className={`${buttonStyle.pill_span} md:block hidden`}>Select</span>
+          <span className={`${cardButtonStyle.card_span}`}>Select</span>
         </button>
         <button
-          className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2 shadow-md`}>
+          className={`${cardButtonStyle.card_Container} ${cardButtonStyle.colorRing}`}>
           <MdOutlineDriveFileRenameOutline className="text-lg " />
-          <span className={`${buttonStyle.pill_span} md:block hidden`}>Rename</span>
+          <span className={`${cardButtonStyle.card_span}`}>Rename</span>
         </button>
         <button
-          className={`${buttonStyle.pill_container} ${buttonStyle.colorRing} py-2 shadow-md`}>
+          className={`${cardButtonStyle.card_Container} ${cardButtonStyle.colorRing}`}>
           <MdDeleteOutline className="text-lg " />
-          <span className={`${buttonStyle.pill_span} md:block hidden`}>Delete</span>
+          <span className={`${cardButtonStyle.card_span}`}>Delete</span>
         </button>
         </div>
         <div className="flex-grow"/>
