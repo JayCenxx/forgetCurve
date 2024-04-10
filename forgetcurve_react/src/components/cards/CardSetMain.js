@@ -21,7 +21,7 @@ const CardSetMain = () => {
         {sampleJson.map((card, index) => {
           return (
             // affect the outside of the card
-            <div key={index} className=" rounded shadow m-3 ">
+            <section key={index} className=" rounded shadow m-3 ">
               {/* affect inside each card */}
               <div className="flex p-3 justify-between items-center  ">
                 <h3 className="text-lg font-semibold cursor-pointer hover:underline ">
@@ -32,7 +32,7 @@ const CardSetMain = () => {
                   <p className="text-center"> {card.reviewTime}</p>
                 </div>
               </div>
-            </div>
+            </section>
           );
         })}
       </section>

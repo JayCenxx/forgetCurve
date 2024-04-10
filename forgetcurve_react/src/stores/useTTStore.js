@@ -5,6 +5,7 @@ import axios from 'axios';
 const useTTStore = create((set, get) => ({
   audio: null,
   lastText: '',
+  autoSpeak:false,
   synthesizeText: async (text) => {
     // get audio & lastText's value
     const { audio, lastText } = get();

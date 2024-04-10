@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../style/flashcard.css';
 import TTSButtons from '../buttons/TTSButton';
 import ArrowButtons from '../buttons/ArrowButton';
 import  CardArray  from '../../utils/CardArray';
+import useTTStore from '../../stores/useTTStore';
+import { useLocation } from 'react-router-dom';
+
 
 function FlashCard() {
+  const location = useLocation();
   const card = CardArray();
   const [isFlipped, setIsFlipped] = useState(false);
   const [curPage, setCurPage] = useState(0);
@@ -12,6 +16,7 @@ function FlashCard() {
 
   const [frontText, setFrontText] = useState(card[curPage].front);
   const [backText, setBackText] = useState(card[curPage].back);
+  const {autoSpeak,synthesizeText}=useTTStore()
 
   const handleNext = () => {
     const nextPage = curPage + 1;
@@ -30,6 +35,20 @@ function FlashCard() {
       setBackText(card[prevPage].back);
     }
   };
+
+  useEffect(() => {
+  
+    if(autoSpeak===false){
+    return;}
+    
+      // isflip true is front  send frontText over, false is back 
+      if(isFlipped===false){
+        synthesizeText(frontText)
+      }else{
+        synthesizeText(backText)
+      }
+  },[isFlipped,location.pathname,curPage])
+
 
 
   return (
