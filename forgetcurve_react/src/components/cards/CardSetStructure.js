@@ -1,6 +1,6 @@
 import { FiPlus } from "react-icons/fi";
 import { buttonStyle, cardButtonStyle } from "../../style/styles";
-import CardSetDetails from "./CardDetails";
+import CardSetDetails from "./CardSetDetails";
 import { FaRegHandPointer } from "react-icons/fa";
 import { MdDeleteOutline,MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { BiDownArrow } from "react-icons/bi";
@@ -45,11 +45,11 @@ const CardSetStructure = () => {
 
 {/* tap system */}
       <section className="flex items-center justify-start space-x-1  w-9/12 mx-auto mt-6 pl-3">
-        <div className="flex items-center justify-center px-4 py-1  shadow-lg rounded-md  hover:bg-gray-100 focus:outline-none py-3">
+        <div className="flex items-center justify-center px-4 py-1  shadow-lg rounded-md  hover:bg-gray-100 focus:outline-none py-3 bg-white">
            Default
         </div>
         <button
-          className={`${buttonStyle.round_container} ${buttonStyle.colorRing} py-2 shadow-md`}
+          className={`${buttonStyle.round_container} ${buttonStyle.colorRing} py-2 shadow-md bg-white`}
         >
           <FiPlus className="text-lg " />
           <span className={buttonStyle.round_span}></span>

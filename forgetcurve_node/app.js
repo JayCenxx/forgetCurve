@@ -17,16 +17,17 @@ app.use("/", (req, res, next) => {
 });
 
 app.post('/synthesize-speech', async (req, res) => {
-  const { text } = req.body; 
+  
+  const { input,voice,audioConfig } = req.body; 
 
-  if (!text) {
+  if (!input.text) {
       return res.status(400).send({ error: 'Text is required' });
   }
 
   const requestData = {
-      input: { text },
-      voice: { languageCode: 'en-US', ssmlGender: 'NEUTRAL' },
-      audioConfig: { audioEncoding: 'MP3' },
+      input: input,
+      voice: voice,
+      audioConfig: { audioEncoding: 'MP3' ,speakingRate: audioConfig.speakingRate},
   };
 
   try {

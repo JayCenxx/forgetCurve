@@ -7,7 +7,7 @@ const baseStyles = {
 };
 
 const buttonStyle = {
-  pill_container: `${baseStyles.container} px-4 py-1`,
+  pill_container: `${baseStyles.container} px-4 py-1 `,
   pill_span: `${baseStyles.span} ml-2`,
   round_container: `${baseStyles.container} p-2 h-12 w-12`,
   round_span: baseStyles.span,
@@ -16,7 +16,7 @@ const buttonStyle = {
 };
 
 const cardButtonStyle = {
-  card_Container: `${buttonStyle.pill_container} py-2 shadow-md`,
+  card_Container: `${buttonStyle.pill_container} py-2 shadow-md bg-white`,
   card_span: `${buttonStyle.pill_span} md:block hidden`,
   focusColor: "focus:bg-red-500",
 };

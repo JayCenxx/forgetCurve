@@ -17,7 +17,7 @@ const CardSetMain = () => {
       </section>
 
       {/* the Card List , affect the outside border & setup rules for the grid */}
-      <section className="border-2 border-gray-200 rounded-lg p-4 grid grid-cols-1 sm:grid-cols-2 ">
+      <section className="shadow-lg rounded-lg p-4 grid grid-cols-1 sm:grid-cols-2 bg-white">
         {sampleJson.map((card, index) => {
           return (
             // affect the outside of the card
