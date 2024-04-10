@@ -2,8 +2,8 @@ import  {sampleJson}  from "../../utils/sampleJson";
 import ArrowButtons from "../buttons/ArrowButton";
 import { useNavigate } from 'react-router-dom';
 const CardSetMain = () => {
+  
   const navigate  = useNavigate();
-
   const handleViewMoreClick = () => {
     navigate ('/CardSetStructure');
   };
@@ -40,6 +40,7 @@ const CardSetMain = () => {
       {/* arrow key to move to next page */}
       <ArrowButtons></ArrowButtons>
     </main>
+     
   );
 };
 
