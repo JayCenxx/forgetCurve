@@ -30,7 +30,7 @@ const useTTStore = create((set, get) => ({
         console.error('Error synthesizing text:', error);
       }
     } else {
-        // play existing audio + error handling 
+        // play existing audio thats created + error handling 
       audio.play().catch((error) => {
         console.error('Error playing the audio', error);
       });

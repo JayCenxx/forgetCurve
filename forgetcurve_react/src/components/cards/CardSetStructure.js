@@ -5,7 +5,7 @@ import { FaRegHandPointer } from "react-icons/fa";
 import { MdDeleteOutline,MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { BiDownArrow } from "react-icons/bi";
 import ThreedotsButton from "../buttons/ThreedotsButton";
-
+import  {sampleJson}  from "../../utils/sampleJson";
 const CardSetStructure = () => {
   return (
     <>
@@ -58,13 +58,14 @@ const CardSetStructure = () => {
 
 {/* card deck module */}
       <section className="grid grid-cols-12  w-9/12 mx-auto ">
-        <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
-          <CardSetDetails />
-        </div>
+        {sampleJson.map(item=>(
+        <div key={item.key} className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
+        <CardSetDetails subject={item.subject} reviewTime={item.reviewTime} reviewTerms={item.reviewTerms} stars={item.stars} totalTerms={item.totalTerms} views={item.views} createDate={item.createDate}/>
+      </div>
+        ))}
+      
 
-        <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
-          <CardSetDetails />
-        </div>
+  
       </section>
     </>
   );
