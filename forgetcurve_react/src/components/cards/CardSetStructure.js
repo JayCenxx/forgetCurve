@@ -1,12 +1,11 @@
 import { FiPlus } from "react-icons/fi";
 import { buttonStyle, cardButtonStyle } from "../../style/styles";
-import CardSetDetails from "./CardDetails";
+import CardSetDetails from "./CardSetDetails";
 import { FaRegHandPointer } from "react-icons/fa";
 import { MdDeleteOutline,MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { BiDownArrow } from "react-icons/bi";
 import ThreedotsButton from "../buttons/ThreedotsButton";
-import { useState } from "react";
-
+import  {sampleJson}  from "../../utils/sampleJson";
 const CardSetStructure = () => {
   return (
     <>
@@ -46,11 +45,11 @@ const CardSetStructure = () => {
 
 {/* tap system */}
       <section className="flex items-center justify-start space-x-1  w-9/12 mx-auto mt-6 pl-3">
-        <div className="flex items-center justify-center px-4 py-1  shadow-lg rounded-md  hover:bg-gray-100 focus:outline-none py-3">
+        <div className="flex items-center justify-center px-4 py-1  shadow-lg rounded-md  hover:bg-gray-100 focus:outline-none py-3 bg-white">
            Default
         </div>
         <button
-          className={`${buttonStyle.round_container} ${buttonStyle.colorRing} py-2 shadow-md`}
+          className={`${buttonStyle.round_container} ${buttonStyle.colorRing} py-2 shadow-md bg-white`}
         >
           <FiPlus className="text-lg " />
           <span className={buttonStyle.round_span}></span>
@@ -59,13 +58,14 @@ const CardSetStructure = () => {
 
 {/* card deck module */}
       <section className="grid grid-cols-12  w-9/12 mx-auto ">
-        <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
-          <CardSetDetails />
-        </div>
+        {sampleJson.map(item=>(
+        <div key={item.key} className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
+        <CardSetDetails subject={item.subject} reviewTime={item.reviewTime} reviewTerms={item.reviewTerms} stars={item.stars} totalTerms={item.totalTerms} views={item.views} createDate={item.createDate}/>
+      </div>
+        ))}
+      
 
-        <div className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 m-3">
-          <CardSetDetails />
-        </div>
+  
       </section>
     </>
   );
