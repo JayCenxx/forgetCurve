@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import translateService from "../../services/translationService";
+import translateServ from "../../services/translationServ";
 import { langCodeArray } from "../../utils/LangCodeArray";
 
 const CardDetailsEdit = () => {
@@ -12,14 +12,13 @@ const [isSwap,setIsSwap] = useState(false)
 // },[])
 
   // need the front & target translated language type
-  const handleTranslation = (frontText, targetLang) => {
+  const handleTranslation =async (frontText, targetLang) => {
     try {
-      console.log(frontText, targetLang);
-      const translateResult = translateService(frontText, targetLang);
-      setBack(translateResult);
+      const result = await translateServ(frontText, targetLang);
+      setBack(result.data.translatedText);
     } catch (error) {
       // Handle the translation error, maybe set an error state and show it in the UI
-      console.error("Error translating:", error);
+      console.error("Error at handling translation:", error);
     }
   };
 

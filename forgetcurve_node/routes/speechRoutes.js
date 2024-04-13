@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const synthesizeSpeech = require('../services/speechService');
-
+const translate = require('google-translate-api-x');
 router.post('/speakText', async (req, res) => {
   const { input, voice, audioConfig } = req.body;
 
@@ -25,15 +25,17 @@ router.post('/speakText', async (req, res) => {
 );
 
 router.post('/translate', async (req, res) => {
-    const { text, to } = req.body;
-  
+    const { frontText, targetLang } = req.body;
+
+    console.log( frontText, targetLang);
     // Validate the input
-    if (!text || !to) {
+    if (!frontText || !targetLang) {
       return res.status(400).json({ error: 'Both text and target language are required' });
     }
   
     try {
-      const result = await translateText(text, to);
+    
+      const result = await translate(frontText, {to:targetLang});
       res.json({
         translatedText: result.text,
         langCode: result.from.language.iso

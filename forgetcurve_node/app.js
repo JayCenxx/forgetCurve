@@ -3,7 +3,7 @@ const axios = require("axios")
 const express = require("express");
 const app = express();
 const cors = require("cors")
-const translate = require('google-translate-api-x');
+
 const { googleUrl,port } = require("./config/config");
 const speechRoutes = require('./routes/speechRoutes');
 
