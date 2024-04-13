@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import translateServ from "../../services/translationServ";
 import { langCodeArray } from "../../utils/LangCodeArray";
 import LangDropdown from "../dropDownMenu/LangDropDown";
-import { getLangCodeServ } from "../../services/langCodeServ";
+import useLangCodeStore from "../../stores/useLangCodeStore";
+
 
 const CardDetailsEdit = () => {
   const [front, setFront] = useState("hi there");
   const [back, setBack] = useState("hi how are you");
-  const [isSwap, setIsSwap] = useState(false);
-  const [backSelectLang,setBackSelectLang]=useState("")
+const langCode=useLangCodeStore(i=>i.langCode)
+
   // need the front & target translated language type
   const handleTranslation = async (frontText, targetLangCode) => {
     try {
@@ -24,7 +25,7 @@ const CardDetailsEdit = () => {
       {/* create a flex container */}
       <section>
         {/* send back the langcode back to this button  */}
-        <button onClick={() => handleTranslation(front, getLangCodeServ())}>
+        <button onClick={() => handleTranslation(front, langCode)}>
           translate
         </button>
       </section>

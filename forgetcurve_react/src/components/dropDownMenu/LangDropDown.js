@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { langCodeArray } from "../../utils/LangCodeArray";
-import { setLangCodeServ } from "../../services/langCodeServ";
+import useLangCodeStore from"../../stores/useLangCodeStore"; 
 
 const LangDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('Select Language');
+  const setLangCode= useLangCodeStore(i=> i.setlangCode)
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -14,8 +15,7 @@ const LangDropdown = () => {
     // close the dropdown after selecting one
      setIsOpen(false);
     // send the data via services.
-    setLangCodeServ(langCode)
-  
+    setLangCode(langCode)
   };
 
   return (
