@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const synthesizeSpeech = require('../services/speechService');
 const translate = require('google-translate-api-x');
+
+// text to speech 
 router.post('/speakText', async (req, res) => {
   const { input, voice, audioConfig } = req.body;
 
@@ -24,22 +26,35 @@ router.post('/speakText', async (req, res) => {
 }
 );
 
+// translate
 router.post('/translate', async (req, res) => {
-    const { frontText, targetLang } = req.body;
-
-    console.log( frontText, targetLang);
+    const { frontText, frontLangCode, backLangCode } = req.body;
+console.log(frontText, frontLangCode, backLangCode);
     // Validate the input
-    if (!frontText || !targetLang) {
-      return res.status(400).json({ error: 'Both text and target language are required' });
+    if (!frontText || !backLangCode) {
+      return res.status(400).json({ error: 'Both text and target-language are required' });
     }
   
     try {
     
-      const result = await translate(frontText, {to:targetLang});
-      res.json({
-        translatedText: result.text,
-        langCode: result.from.language.iso
-      });
+  //  user selected auto lang detection for Front
+      if(frontLangCode ==="auto"){
+        const result = await translate(frontText, {to:backLangCode, autoCorrect: true});
+        res.json({
+          translatedText: result.text,
+          // this is the auto detection code 
+          langCode: result.from.language.iso
+        });
+      
+      }else{
+        // otherwise the user selected a frontLangCode
+        const result = await translate(frontText, {from:frontLangCode,to:backLangCode, autoCorrect: true});
+        res.json({
+          translatedText: result.text,
+          langCode: frontLangCode
+        });
+      }
+     
     } catch (error) {
       console.error('Error translating:', error);
       res.status(500).json({ error: 'Error processing your translation request' });

@@ -1,5 +1,6 @@
 
 export const langCodeArray = [
+    {"language":"Auto-Detect","langCode":"auto"},
     {"language": "Amharic", "langCode": "am"},
     {"language": "Arabic", "langCode": "ar"},
     {"language": "Basque", "langCode": "eu"},
@@ -57,3 +58,4 @@ export const langCodeArray = [
     {"language": "Vietnamese", "langCode": "vi"},
     {"language": "Welsh", "langCode": "cy"}
   ];
+

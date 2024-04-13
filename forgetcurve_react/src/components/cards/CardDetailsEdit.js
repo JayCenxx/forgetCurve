@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import translateServ from "../../services/translationServ";
-import { langCodeArray } from "../../utils/LangCodeArray";
 import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
 
@@ -8,12 +7,12 @@ import useLangCodeStore from "../../stores/useLangCodeStore";
 const CardDetailsEdit = () => {
   const [front, setFront] = useState("hi there");
   const [back, setBack] = useState("hi how are you");
-const langCode=useLangCodeStore(i=>i.langCode)
-
+const backLangCode=useLangCodeStore(i=>i.backLangCode)
+const frontLangCode=useLangCodeStore(i=>i.frontLangCode)
   // need the front & target translated language type
-  const handleTranslation = async (frontText, targetLangCode) => {
+  const handleTranslation = async (frontText, frontLangCode, backLangCode) => {
     try {
-      const result = await translateServ(frontText, targetLangCode);
+      const result = await translateServ(frontText, frontLangCode, backLangCode);
       setBack(result.translatedText);
     } catch (error) {
       console.error("Error at handling translation:", error);
@@ -27,7 +26,7 @@ const langCode=useLangCodeStore(i=>i.langCode)
       {/* create a flex container */}
       <section>
         {/* send back the langcode back to this button  */}
-        <button onClick={() => handleTranslation(front, langCode)}>
+        <button onClick={() => handleTranslation(front, frontLangCode,backLangCode)}>
           translate
         </button>
       </section>
@@ -44,7 +43,7 @@ const langCode=useLangCodeStore(i=>i.langCode)
           />
           <div className="flex justify-between">
               <h1 className="ml-1 text-gray-500">Front</h1>
-              <LangDropdown/>
+              <LangDropdown isAutoDetectFront={true}/>
           </div>
         </section>
         {/* back */}
