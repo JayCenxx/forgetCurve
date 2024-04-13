@@ -20,6 +20,8 @@ const langCode=useLangCodeStore(i=>i.langCode)
     }
   };
 
+
+
   return (
     <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
       {/* create a flex container */}
