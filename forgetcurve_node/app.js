@@ -19,19 +19,9 @@ app.use("/", (req, res, next) => {
   }
 });
 
-app.post('/google',speechRoutes);
+app.use('/google',speechRoutes);
 
-app.post('/translate', async (req, res) => {
-  try{
-  const result = await translate("how are you doing", { to: 'es' });
-    res.json({translateText:result.text,
-    langCode:result.from.language.iso
-    })
-  }
-  catch(err){
-  console.log('Error translating', err);
-  }
-});
+
 
 
 app.listen(port, () => {

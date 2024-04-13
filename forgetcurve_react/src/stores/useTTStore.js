@@ -20,7 +20,7 @@ const useTTStore = create((set, get) => ({
 
       try {
         // axios call 
-        const response = await axios.post('http://localhost:4000/google/synthesize-speech', Data);
+        const response = await axios.post('http://localhost:4000/google/speakText', Data);
         const audioContent = `data:audio/mp3;base64,${response.data.audioContent}`;
         // use the base64 string to convert to mp3 to create an audio
         const newAudio = new Audio(audioContent);
