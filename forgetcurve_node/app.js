@@ -3,11 +3,14 @@ const axios = require("axios")
 const express = require("express");
 const app = express();
 const cors = require("cors")
+const translate = require('google-translate-api-x');
+const { googleUrl,port } = require("./config/config");
+const speechRoutes = require('./routes/speechRoutes');
+
 app.use(express.json())
 app.use(cors())
-const googleUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${process.env.API_KEY}`;
 
-const port = process.env.PORT;
+
 app.use("/", (req, res, next) => {
   if (req.path === "/") {
     res.json({ status: "success" });
@@ -16,26 +19,17 @@ app.use("/", (req, res, next) => {
   }
 });
 
-app.post('/synthesize-speech', async (req, res) => {
-  
-  const { input,voice,audioConfig } = req.body; 
+app.post('/google',speechRoutes);
 
-  if (!input.text) {
-      return res.status(400).send({ error: 'Text is required' });
+app.post('/translate', async (req, res) => {
+  try{
+  const result = await translate("how are you doing", { to: 'es' });
+    res.json({translateText:result.text,
+    langCode:result.from.language.iso
+    })
   }
-
-  const requestData = {
-      input: input,
-      voice: voice,
-      audioConfig: { audioEncoding: 'MP3' ,speakingRate: audioConfig.speakingRate},
-  };
-
-  try {
-      const response = await axios.post(googleUrl, requestData);
-      res.json(response.data);
-  } catch (error) {
-      console.error('Error calling the Google Text-to-Speech API:', error.message);
-      res.status(500).send({ error: 'Error processing your request' });
+  catch(err){
+  console.log('Error translating', err);
   }
 });
 
