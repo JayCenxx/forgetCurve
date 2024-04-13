@@ -3,6 +3,11 @@ const express = require('express');
 const router = express.Router();
 const synthesizeSpeech = require('../services/speechService');
 const translate = require('google-translate-api-x');
+const projectId=process.env.PROJECT_ID;
+const location=process.env.location;
+const {TranslationServiceClient} = require('@google-cloud/translate');
+const client = new TranslationServiceClient();
+
 
 // text to speech 
 router.post('/speakText', async (req, res) => {
@@ -26,10 +31,9 @@ router.post('/speakText', async (req, res) => {
 }
 );
 
-// translate
-router.post('/translate', async (req, res) => {
+//free translation service
+router.post('/ctranslate', async (req, res) => {
     const { frontText, frontLangCode, backLangCode } = req.body;
-console.log(frontText, frontLangCode, backLangCode);
     // Validate the input
     if (!frontText || !backLangCode) {
       return res.status(400).json({ error: 'Both text and target-language are required' });
@@ -60,5 +64,41 @@ console.log(frontText, frontLangCode, backLangCode);
       res.status(500).json({ error: 'Error processing your translation request' });
     }
   });
+
+//expensive  translate
+  router.post('/etranslate', async (req, res) => {
+
+    const { frontText, frontLangCode, backLangCode } = req.body;
+    if (!frontText || !backLangCode) {
+      return res.status(400).json({ error: 'Both text and target language are required' });
+    }
+  
+    const request = {
+      parent: `projects/${process.env.PROJECT_ID}/locations/${process.env.LOCATION}`,
+      contents: [frontText],
+      mimeType: 'text/plain',
+      targetLanguageCode: backLangCode,
+    };
+  
+    if (frontLangCode !== "auto") {
+      request.sourceLanguageCode = frontLangCode;
+    }
+  
+    try {
+      const [response] = await client.translateText(request);
+      const translations = response.translations;
+
+      res.json({
+        translatedText: translations[0].translatedText,
+        detectedLanguageCode: frontLangCode === 'auto' ? translations[0].detectedSourceLanguage : frontLangCode,
+      });
+    } catch (error) {
+      console.error('Translation API error:', error);
+      res.status(500).json({ error: 'Error processing your translation request', details: error.message });
+    }
+  });
+
+
+
 
 module.exports = router;

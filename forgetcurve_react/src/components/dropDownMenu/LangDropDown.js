@@ -1,80 +1,73 @@
 import { useEffect, useRef, useState } from "react";
 import { langCodeArray } from "../../utils/LangCodeArray";
 import useLangCodeStore from "../../stores/useLangCodeStore";
+import DropDownList from "./DropDownList";
 
-const LangDropdown = ({isAutoDetectFront}) => {
+const LangDropdown = ({ isAutoDetectFront }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("Select Language");
-  const setFrontLangCode=useLangCodeStore((i) => i.setFrontLangCode);
+  const setFrontLangCode = useLangCodeStore((i) => i.setFrontLangCode);
   const setBackLangCode = useLangCodeStore((i) => i.setBackLangCode);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const refs = useRef();
 
-
   const handleItemClick = (language, langCode) => {
-    // selected li
     setSelected(language);
     // close the dropdown after selecting one
     setIsOpen(false);
     // send the data via services.
     setBackLangCode(langCode);
     // say if user pick japanese then pick auto-detect again
-    if(selected==="Auto-Detect" &&isAutoDetectFront){
-      setFrontLangCode("auto")
+    if (selected === "Auto-Detect" && isAutoDetectFront) {
+      setFrontLangCode("auto");
     }
   };
 
-//i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
-useEffect(()=>{
-  if(isAutoDetectFront) {
-    setSelected('Auto-Detect')
-  }
-  setBackLangCode('en')
-},[])
+  //i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
+  useEffect(() => {
+    if (isAutoDetectFront) {
+      setSelected("Auto-Detect");
+      
+    }
+    setBackLangCode("en");
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      console.log(refs.current);
+      // when user open the dropdown menu, if they click else where, it ll close the dropdown
       if (refs.current && !refs.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      console.log("hey");
       document.addEventListener("click", handleClickOutside);
     }
 
+    // cleanup function when this compo demount
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, [isOpen]);
 
+  // front ll have Auto-Detect,  back will ll skip the 1st elem =auto-detect
+  const listItems = isAutoDetectFront ? langCodeArray : langCodeArray.slice(1);
   return (
     <main className="relative" ref={refs}>
       <button
         onClick={toggleDropdown}
-        className=" text-black px-6 rounded focus:outline-none focus:shadow-outline">
-        { selected}
+        className=" text-black px-6 rounded focus:outline-none focus:shadow-outline"
+      >
+        {selected}
       </button>
 
-      {/* togleDropdown button above, flip isOpen from false to true */}
+      {/* togleDropdown button above when click,it flip isOpen from false to true */}
       {isOpen && (
-        <div className="absolute mt-1 rounded-md bg-white shadow-lg ">
+        <div className="absolute mt-1 rounded-md bg-white shadow-lg">
           <ul className="py-1 text-gray-700">
-            {/* if auto===true, then pick this */}
-            {langCodeArray.map((code, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-wrap w-full"
-                onClick={() => handleItemClick(code.language, code.langCode)}
-              >
-                {code.language}
-              </li>
+            {listItems.map((code, index) => (
+              <DropDownList key={index} code={code} onClick={handleItemClick} />
             ))}
-
-            {/* else pick this */}
-
           </ul>
         </div>
       )}

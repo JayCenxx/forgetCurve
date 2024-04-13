@@ -9,6 +9,10 @@ const CardDetailsEdit = () => {
   const [back, setBack] = useState("hi how are you");
 const backLangCode=useLangCodeStore(i=>i.backLangCode)
 const frontLangCode=useLangCodeStore(i=>i.frontLangCode)
+
+// translatedText
+
+
   // need the front & target translated language type
   const handleTranslation = async (frontText, frontLangCode, backLangCode) => {
     try {
