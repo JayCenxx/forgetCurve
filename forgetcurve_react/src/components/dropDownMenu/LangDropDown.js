@@ -10,8 +10,6 @@ const LangDropdown = ({ isAutoDetectFront }) => {
   const setBackLangCode = useLangCodeStore((i) => i.setBackLangCode);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const refs = useRef();
-  const buttonRef = useRef();
-  const [buttonPosition, setButtonPosition] = useState({});
 
   const handleItemClick = (language, langCode) => {
     setSelected(language);
@@ -25,19 +23,6 @@ const LangDropdown = ({ isAutoDetectFront }) => {
     }
   };
 
-  const pinPoint = () => {
-    if (!isOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setButtonPosition({
-        top: rect.top + rect.height, // Position below the button
-        left: rect.left, // Align to the button's left side
-        // You might want to add an offset here if needed
-      });
-    }
-    setIsOpen(!isOpen);
-  };
-
-
   //i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
   useEffect(() => {
     if (isAutoDetectFront) {
@@ -47,17 +32,15 @@ const LangDropdown = ({ isAutoDetectFront }) => {
   }, []);
 
   useEffect(() => {
-
     const handleClickOutside = (e) => {
+      console.log(refs.current, e.target);
       // when user open the dropdown menu, if they click else where, it ll close the dropdown
-      if (refs.current && !refs.current.contains(e.target) ) {
-        console.log(buttonRef!==e.target);
+      if (refs.current && !refs.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-
       document.addEventListener("click", handleClickOutside);
     }
 
@@ -67,27 +50,34 @@ const LangDropdown = ({ isAutoDetectFront }) => {
     };
   }, [isOpen]);
 
-
-  
   // front ll have Auto-Detect,  back will ll skip the 1st elem =auto-detect
   const listItems = isAutoDetectFront ? langCodeArray : langCodeArray.slice(1);
   return (
-    <main className="relative" ref={refs}>
+    <main >
       <button
-       ref={buttonRef}
+        ref={refs}
         onClick={toggleDropdown}
         className=" text-black px-6 rounded focus:outline-none focus:shadow-outline"
       >
         {selected}
       </button>
 
-      {/* togleDropdown button above when click,it flip isOpen from false to true */}
       {isOpen && (
-        // affect the entire dropdownMenu
-        <section className=" flex justify-center items-center ">
-          {/* affect interior group */}
-          <div className="absolute top-0 right-0  mt-1 rounded-md bg-white shadow-lg w-[60vw] p-8" >
-            <ul className="py-1 text-gray-700  grid grid-cols-10 ">
+        // Overlay that covers the entire screen
+        <section
+          className="fixed inset-0 z-10"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          {/* Centered container for the dropdown */}
+          <div
+            className="fixed inset-0 m-auto w-[60vw] max-h-[75vh] h-[50%] p-6 overflow-auto rounded-md bg-white shadow-lg"
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <ul className="py-1 text-gray-700 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8">
               {listItems.map((code, index) => (
                 <DropDownList
                   key={index}
