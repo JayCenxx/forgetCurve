@@ -16,7 +16,6 @@ function App() {
         <Route path="/CardSetStructure" element={<CardSetStructure />} />
       </Routes>
       <CardDetailsEdit/>
-    
     </Router>
   );
 }
