@@ -3,7 +3,6 @@
 import CardSetMain from "./components/cardSet/CardSetMain";
 import CardSetStructure from "./components/cardSet/CardSetStructure";
 import CardDetailsEdit from "./components/cards/CardDetailsEdit";
-import FlashCard from "./components/cards/FlashCard";
 import Header from "./components/header/Header";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 

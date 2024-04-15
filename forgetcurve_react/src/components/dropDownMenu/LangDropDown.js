@@ -1,3 +1,4 @@
+// LangDropDown.js
 import { useEffect, useRef, useState } from "react";
 import { langCodeArray } from "../../utils/LangCodeArray";
 import useLangCodeStore from "../../stores/useLangCodeStore";
@@ -5,36 +6,33 @@ import DropDownList from "./DropDownList";
 
 const LangDropdown = ({ isAutoDetectFront }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("Select Language");
-  const setFrontLangCode = useLangCodeStore((i) => i.setFrontLangCode);
-  const setBackLangCode = useLangCodeStore((i) => i.setBackLangCode);
+  const backLangCode=useLangCodeStore(i=>i.backLangCode)
+const frontLangCode=useLangCodeStore(i=>i.frontLangCode)
+  const setFrontLangCode = useLangCodeStore((state) => state.setFrontLangCode);
+  const setBackLangCode = useLangCodeStore((state) => state.setBackLangCode);
   const toggleDropdown = () => setIsOpen(!isOpen);
   const refs = useRef();
 
-  const handleItemClick = (language, langCode) => {
-    setSelected(language);
-    // close the dropdown after selecting one
+   const handleItemClick = (language, langCode) => {
+// language is the language display text, langCode is 'en' for ex
     setIsOpen(false);
-    // send the data via services.
-    setBackLangCode(langCode);
-    // say if user pick japanese then pick auto-detect again
-    if (selected === "Auto-Detect" && isAutoDetectFront) {
-      setFrontLangCode("auto");
+    if (isAutoDetectFront) {
+      setFrontLangCode({language: language,langCode: langCode });
+    } else {
+      setBackLangCode({language: language,langCode: langCode });
     }
   };
 
   //i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
   useEffect(() => {
     if (isAutoDetectFront) {
-      setSelected("Auto-Detect");
+      setFrontLangCode({ language: "Auto-Detect", langCode: "auto" });
+      setBackLangCode({language: "English",langCode: "en" });
     }
-    setBackLangCode("en");
   }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      console.log(refs.current, e.target);
-      // when user open the dropdown menu, if they click else where, it ll close the dropdown
       if (refs.current && !refs.current.contains(e.target)) {
         setIsOpen(false);
       }
@@ -43,12 +41,10 @@ const LangDropdown = ({ isAutoDetectFront }) => {
     if (isOpen) {
       document.addEventListener("click", handleClickOutside);
     }
-
-    // cleanup function when this compo demount
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen]);
+
+const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language;
 
   // front ll have Auto-Detect,  back will ll skip the 1st elem =auto-detect
   const listItems = isAutoDetectFront ? langCodeArray : langCodeArray.slice(1);
@@ -57,9 +53,12 @@ const LangDropdown = ({ isAutoDetectFront }) => {
       <button
         ref={refs}
         onClick={toggleDropdown}
-        className=" text-black px-6 rounded focus:outline-none focus:shadow-outline"
-      >
-        {selected}
+        className=" text-black px-6 rounded focus:outline-none focus:shadow-outline">
+
+
+        {
+        selected
+        }
       </button>
 
       {isOpen && (
@@ -70,7 +69,7 @@ const LangDropdown = ({ isAutoDetectFront }) => {
         >
           {/* Centered container for the dropdown */}
           <div
-            className="fixed inset-0 m-auto w-[60vw] max-h-[75vh] h-[50%] p-6 overflow-auto rounded-md bg-white shadow-lg"
+            className="fixed inset-0 m-auto w-[60vw] max-h-[75vh] h-[52%] p-6 overflow-auto rounded-md bg-white shadow-lg"
             style={{
               top: "50%",
               left: "50%",
