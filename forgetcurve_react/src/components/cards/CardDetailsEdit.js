@@ -5,14 +5,17 @@ import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
 import { IoSwapHorizontal } from "react-icons/io5";
 import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
-
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 const CardDetailsEdit = () => {
+  
   const [frontText, setFrontText] = useState("");
   const [backText, setBackText] = useState("");
   const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
- 
+
+  
 
   const handleSwap = () => {
     // the back end code also need to check this condition, in case hacker change the frontend code. 
@@ -74,11 +77,15 @@ useEffect(() => {},[frontLangCode])
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
-      {/* create a flex container */}
+        <div className="text-editor">
 
+    </div>
+      {/* create a flex container */}
       <main className="flex items-center">
+
         {/* frontText */}
         <section className="flex flex-col basis-6/12">
+     
           <input
             type="text"
             className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"
@@ -86,6 +93,7 @@ useEffect(() => {},[frontLangCode])
             onChange={(e) => setFrontText(e.target.value)} 
             placeholder=""
           />
+          
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Front</h1>
             <LangDropdown isAutoDetectFront={true} />
@@ -105,6 +113,7 @@ useEffect(() => {},[frontLangCode])
             onChange={(e) => setBackText(e.target.value)}
             placeholder=""
           />
+         
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Back</h1>
 
