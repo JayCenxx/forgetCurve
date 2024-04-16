@@ -59,12 +59,18 @@ export const langCodeArray = [
     {"language": "Welsh", "langCode": "cy"}
   ];
 
- const langCodeMap = langCodeArray.reduce((acc, { langCode, language }) => {
-  // ex, "en" : "English" 
-    acc[langCode] = language;
-    return acc;
-  }, {});
+
 
   export const findLanguageWithLangCode = (tempLangCode) => {
+    const langCodeMap = langCodeArray.reduce((acc, { langCode, language }) => {
+      // ex, "en" : "English" 
+        acc[langCode] = language;
+        return acc;
+      }, {});
+
+      if (!langCodeMap[tempLangCode]) {
+        throw new Error("langCode Not Found");
+      }
+
     return langCodeMap[tempLangCode] || "";
   }

@@ -10,9 +10,15 @@ const CardDetailsEdit = () => {
   const [frontText, setFrontText] = useState("");
   const [backText, setBackText] = useState("");
   const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
-  // this is the problem
+  const isFrontTextEmpty = frontText.trim() === "";
+  const isBackTextEmpty = backText.trim() === "";
+ 
 
   const handleSwap = () => {
+    // the back end code also need to check this condition, in case hacker change the frontend code. 
+    if(isFrontTextEmpty && isBackTextEmpty){
+      return 
+    }
     // Temporary variables to hold the new values
     const newFrontLangCode = backLangCode;
     let newBackLangCode = frontLangCode;
@@ -26,7 +32,6 @@ const CardDetailsEdit = () => {
         language: findLanguageWithLangCode(frontLangCode.langCode),
       };
     }
-  
     // Set the new values to state
     setFrontText(backText);
     setBackText(frontText);
@@ -34,6 +39,7 @@ const CardDetailsEdit = () => {
     setBackLangCode(newBackLangCode);
   };
   
+useEffect(() => {},[frontLangCode])
 
   //need the frontText & target translated language type
   const handleTranslation =useCallback( async (
@@ -41,6 +47,10 @@ const CardDetailsEdit = () => {
     tempfrontLangCode,
     tempbackLangCode) => {
     try {
+       // the back end code also need to check this condition, in case hacker change the frontend code. 
+      if(isFrontTextEmpty){
+        return;
+      }
       const result = await translateServ(
         tempFrontText,
         tempfrontLangCode,
@@ -60,7 +70,7 @@ const CardDetailsEdit = () => {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  },[frontLangCode])
+  },[isFrontTextEmpty])
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
@@ -82,7 +92,7 @@ const CardDetailsEdit = () => {
           </div>
         </section>
         <section className="mr-6 ml-4 text-xl">
-          <button onClick={handleSwap}>
+          <button onClick={handleSwap} className={`${isFrontTextEmpty && isBackTextEmpty ? 'text-gray-500' : 'text-black'} `} >
             <IoSwapHorizontal />
           </button>
         </section>
@@ -109,10 +119,9 @@ const CardDetailsEdit = () => {
               handleTranslation(
                 frontText,
                 frontLangCode.langCode,
-                backLangCode.langCode
-              )
-            }
-          >
+                backLangCode.langCode )}
+                className={`${isFrontTextEmpty ? 'text-gray-500' : 'text-black'} `}
+            >
             translate
           </button>
         </section>
