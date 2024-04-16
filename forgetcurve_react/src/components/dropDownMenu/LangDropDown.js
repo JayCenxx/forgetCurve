@@ -6,15 +6,12 @@ import DropDownList from "./DropDownList";
 
 const LangDropdown = ({ isAutoDetectFront }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const backLangCode=useLangCodeStore(i=>i.backLangCode)
-const frontLangCode=useLangCodeStore(i=>i.frontLangCode)
-  const setFrontLangCode = useLangCodeStore((state) => state.setFrontLangCode);
-  const setBackLangCode = useLangCodeStore((state) => state.setBackLangCode);
+const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } = useLangCodeStore();
   const toggleDropdown = () => setIsOpen(!isOpen);
   const refs = useRef();
 
    const handleItemClick = (language, langCode) => {
-// language is the language display text, langCode is 'en' for ex
+// language is like "english" display text, langCode is 'en' for ex
     setIsOpen(false);
     if (isAutoDetectFront) {
       setFrontLangCode({language: language,langCode: langCode });

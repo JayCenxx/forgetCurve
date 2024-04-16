@@ -1,95 +1,122 @@
 // CardDetailsEdit.js
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import translateServ from "../../services/translationServ";
 import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
 import { IoSwapHorizontal } from "react-icons/io5";
+import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 
 const CardDetailsEdit = () => {
-  const [frontText, setFrontText] = useState("hi there");
-  const [backText, setBackText] = useState("hi how are you");
-const backLangCode=useLangCodeStore(i=>i.backLangCode)
-const frontLangCode=useLangCodeStore(i=>i.frontLangCode)
-const setFrontLangCode = useLangCodeStore(state => state.setFrontLangCode);
-const setBackLangCode = useLangCodeStore(state => state.setBackLangCode);
+  const [frontText, setFrontText] = useState("");
+  const [backText, setBackText] = useState("");
+  const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
+  // this is the problem
 
-const handleSwap=()=>{
-  // swap text
-  setFrontText(backText);
-  setBackText(frontText)
-// swap langugage & langCode
-  setFrontLangCode(backLangCode)
-  setBackLangCode(frontLangCode)
-}
+  const handleSwap = () => {
+    // Temporary variables to hold the new values
+    const newFrontLangCode = backLangCode;
+    let newBackLangCode = frontLangCode;
+  
+    // Check if the language was auto-detected and update accordingly
+    if (frontLangCode.language === "Auto-Detect") {
+      // when the swap button is pressed, assume it detected its English, i want to replace Auto-Detect with English
+      //swap to the back, ex. Japanese - English,  instead of  Japanese - Auto Detect
+      newBackLangCode = {
+        ...frontLangCode,
+        language: findLanguageWithLangCode(frontLangCode.langCode),
+      };
+    }
+  
+    // Set the new values to state
+    setFrontText(backText);
+    setBackText(frontText);
+    setFrontLangCode(newFrontLangCode);
+    setBackLangCode(newBackLangCode);
+  };
+  
 
-
- //need the frontText & target translated language type
-  const handleTranslation = async (frontText, frontLangCode, backLangCode) => {
- 
+  //need the frontText & target translated language type
+  const handleTranslation =useCallback( async (
+    tempFrontText,
+    tempfrontLangCode,
+    tempbackLangCode) => {
     try {
-      const result = await translateServ(frontText, frontLangCode, backLangCode);
+      const result = await translateServ(
+        tempFrontText,
+        tempfrontLangCode,
+        tempbackLangCode
+      );
+      // if it's Not auto-detect it wont have .front
+      if (!result.front) {
+        // langCode ex 'en' ll be return, just wanna store it somewhere, so i can find "english" in the array
+        setFrontLangCode({
+          ...frontLangCode,
+          langCode: result.detectedLanguageCode,
+        });
+      }
+
       setBackText(result.translatedText);
     } catch (error) {
       console.error("Error at handling translation:", error);
+      alert("Translation failed. Please try again later.");
     }
-  };
+  },[frontLangCode])
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
       {/* create a flex container */}
-      <section>
-        {/* send backText the langcode backText to this button  */}
-        <button onClick={() => handleTranslation(frontText, frontLangCode.langCode,backLangCode.langCode)}>
-          translate
-        </button>
-      </section>
 
-      <section className="flex items-center">
+      <main className="flex items-center">
         {/* frontText */}
-        <div className="flex flex-col basis-6/12">
+        <section className="flex flex-col basis-6/12">
           <input
             type="text"
             className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"
             value={frontText}
-            onChange={e => setFrontText(e.target.value)}
-            placeholder="Front"
+            onChange={(e) => setFrontText(e.target.value)} 
+            placeholder=""
           />
           <div className="flex justify-between">
-              <h1 className="ml-1 text-gray-500">Front</h1>
-              <LangDropdown isAutoDetectFront={true}/>
+            <h1 className="ml-1 text-gray-500">Front</h1>
+            <LangDropdown isAutoDetectFront={true} />
           </div>
-        </div>
-        <div className="mr-6 ml-4">
+        </section>
+        <section className="mr-6 ml-4 text-xl">
           <button onClick={handleSwap}>
-          <IoSwapHorizontal/>
+            <IoSwapHorizontal />
           </button>
-        </div>
+        </section>
         {/* backText */}
-        <div className="flex flex-col basis-5/12">
+        <section className="flex flex-col basis-6/12">
           <input
             type="text"
             className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"
             value={backText}
-            onChange={e => setBackText(e.target.value)}
-            placeholder="Back"
+            onChange={(e) => setBackText(e.target.value)}
+            placeholder=""
           />
           <div className="flex justify-between">
-          <h1 className="ml-1 text-gray-500">Back</h1>
+            <h1 className="ml-1 text-gray-500">Back</h1>
 
-          <LangDropdown/>
+            <LangDropdown />
           </div>
-        </div>
+        </section>
 
-        {/* upload photo*/}
-        <div className="p-2">
-          {/* Replace with your actual image icon */}
-          <img
-            src="/path-to-your-image-icon.svg"
-            alt="Edit"
-            className="h-6 w-6"
-          />
-        </div>
-      </section>
+        <section>
+          {/* send backText the langcode backText to this button  */}
+          <button
+            onClick={() =>
+              handleTranslation(
+                frontText,
+                frontLangCode.langCode,
+                backLangCode.langCode
+              )
+            }
+          >
+            translate
+          </button>
+        </section>
+      </main>
     </main>
   );
 };

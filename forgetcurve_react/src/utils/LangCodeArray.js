@@ -59,3 +59,12 @@ export const langCodeArray = [
     {"language": "Welsh", "langCode": "cy"}
   ];
 
+ const langCodeMap = langCodeArray.reduce((acc, { langCode, language }) => {
+  // ex, "en" : "English" 
+    acc[langCode] = language;
+    return acc;
+  }, {});
+
+  export const findLanguageWithLangCode = (tempLangCode) => {
+    return langCodeMap[tempLangCode] || "";
+  }

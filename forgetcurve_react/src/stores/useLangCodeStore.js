@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const useLangCodeStore = create(set => ({
   // by default front is Auto-Detect Language
-  frontLangCode:{
+frontLangCode:{
     "language":"Auto-Detect",
     "langCode":"auto"},
   backLangCode: {

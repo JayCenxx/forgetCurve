@@ -80,18 +80,28 @@ router.post('/ctranslate', async (req, res) => {
       targetLanguageCode: backLangCode,
     };
   
-    if (frontLangCode !== "auto") {
-      request.sourceLanguageCode = frontLangCode;
-    }
+ 
   
     try {
       const [response] = await client.translateText(request);
       const translations = response.translations;
 
-      res.json({
-        translatedText: translations[0].translatedText,
-        detectedLanguageCode: frontLangCode === 'auto' ? translations[0].detectedSourceLanguage : frontLangCode,
-      });
+      if(frontLangCode==='auto'){
+        res.json({
+          translatedText: translations[0].translatedText,
+          detectedLanguageCode: translations[0].detectedLanguageCode
+        });
+      }
+      else{
+        res.json({
+          translatedText: translations[0].translatedText,
+          detectedLanguageCode: translations[0].detectedLanguageCode,
+          front: frontLangCode,
+        });
+      }
+     
+
+      
     } catch (error) {
       console.error('Translation API error:', error);
       res.status(500).json({ error: 'Error processing your translation request', details: error.message });
