@@ -61,19 +61,19 @@ const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language
       {isOpen && (
         // Overlay that covers the entire screen
         <section
-          className="fixed inset-0 z-10"
+          className="fixed inset-0 z-10 "
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           {/* Centered container for the dropdown */}
           <div
-            className="fixed inset-0 m-auto w-[60vw] max-h-[75vh] h-[52%] p-6 overflow-auto rounded-md bg-white shadow-lg"
+            className=" fixed inset-0 m-auto w-[60vw] max-h-[55%] h-[55%] p-6 overflow-auto rounded-md bg-white shadow-lg grid place-items-center"
             style={{
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
             }}
           >
-            <ul className="py-1 text-gray-700 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8">
+            <ul className=" text-gray-700 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-8 content-center">
               {listItems.map((code, index) => (
                 <DropDownList
                   key={index}
