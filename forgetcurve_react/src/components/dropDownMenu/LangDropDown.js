@@ -51,8 +51,6 @@ const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language
         ref={refs}
         onClick={toggleDropdown}
         className=" text-black px-6 rounded focus:outline-none focus:shadow-outline">
-
-
         {
         selected
         }

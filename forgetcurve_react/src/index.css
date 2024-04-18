@@ -32,15 +32,19 @@ body {
 
 
 .ProseMirror:focus {
-  outline: 2px solid #1068e4; 
+  
 }
 
 .ProseMirror {
-  @apply w-1/2 border-b-2  focus:outline-none bg-white 
+ 
 }
 
+.editor-content ul {
+  background-color: #1f0a0a; /* Or any desired color */
+}
 .tiptap {
  
+  
 
   > * + * {
     margin-top: 0.75em;

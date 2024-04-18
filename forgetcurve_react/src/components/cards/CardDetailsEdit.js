@@ -7,15 +7,32 @@ import { IoSwapHorizontal } from "react-icons/io5";
 import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { MyEditor } from "../richTextEditor/MyEditor";
+import { Toolbar } from "../richTextEditor/Toolbar";
+import { debounce } from "../../utils/debounce";
 const CardDetailsEdit = () => {
   
-  const [frontText, setFrontText] = useState("");
-  const [backText, setBackText] = useState("");
+
+  const [frontText, setFrontText] = useState('');
+  const [backText, setBackText] = useState('');
   const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
 
-  
+  const [activeEditor, setActiveEditor] = useState(null);
+
+  const handleEditorFocus = (editor) => {
+    setActiveEditor(editor);
+  };
+
+  const handleFrontTextEditor = useCallback(debounce(content => {
+    setFrontText(content);
+    console.log(frontText);
+  }, 500), []); // 500 ms delay
+
+  const handleBackTextEditor = (content) => {
+    setBackText(content);
+  };
 
   const handleSwap = () => {
     // the back end code also need to check this condition, in case hacker change the frontend code. 
@@ -42,43 +59,32 @@ const CardDetailsEdit = () => {
     setBackLangCode(newBackLangCode);
   };
   
-useEffect(() => {},[frontLangCode])
-
+useEffect(() => {},[frontLangCode,backText])
   //need the frontText & target translated language type
-  const handleTranslation =useCallback( async (
-    tempFrontText,
-    tempfrontLangCode,
-    tempbackLangCode) => {
+  const handleTranslation = useCallback(async () => {
+    if (isFrontTextEmpty) return;
+    
     try {
-       // the back end code also need to check this condition, in case hacker change the frontend code. 
-      if(isFrontTextEmpty){
-        return;
-      }
-      const result = await translateServ(
-        tempFrontText,
-        tempfrontLangCode,
-        tempbackLangCode
-      );
-      // if it's Not auto-detect it wont have .front
+      const result = await translateServ(frontText, frontLangCode.langCode, backLangCode.langCode);
       if (!result.front) {
-        // langCode ex 'en' ll be return, just wanna store it somewhere, so i can find "english" in the array
         setFrontLangCode({
           ...frontLangCode,
           langCode: result.detectedLanguageCode,
         });
       }
-
-      setBackText(result.translatedText);
+      setBackText(result.translatedText); // This updates the backText state
     } catch (error) {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  },[isFrontTextEmpty])
+  }, [frontText, frontLangCode, backLangCode, isFrontTextEmpty]);
+
+
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
         <div className="text-editor">
-
+        <Toolbar activeEditor={activeEditor} setActiveEditor={setActiveEditor} />
     </div>
       {/* create a flex container */}
       <main className="flex items-center">
@@ -86,14 +92,14 @@ useEffect(() => {},[frontLangCode])
         {/* frontText */}
         <section className="flex flex-col basis-6/12">
      
-          <input
-            type="text"
-            className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"
-            value={frontText}
-            onChange={(e) => setFrontText(e.target.value)} 
-            placeholder=""
-          />
+   
           
+          <MyEditor
+        editorContent={frontText}
+        onEditorFocus={handleEditorFocus}
+        changeContent={handleFrontTextEditor}
+      />
+
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Front</h1>
             <LangDropdown isAutoDetectFront={true} />
@@ -106,13 +112,12 @@ useEffect(() => {},[frontLangCode])
         </section>
         {/* backText */}
         <section className="flex flex-col basis-6/12">
-          <input
-            type="text"
-            className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"
-            value={backText}
-            onChange={(e) => setBackText(e.target.value)}
-            placeholder=""
-          />
+
+           <MyEditor
+        editorContent={backText}
+        onEditorFocus={handleEditorFocus}
+        changeContent={handleBackTextEditor}
+      />
          
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Back</h1>
