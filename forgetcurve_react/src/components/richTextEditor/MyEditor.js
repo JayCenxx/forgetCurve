@@ -10,11 +10,11 @@ export const MyEditor = ({ editorContent, onEditorFocus, changeContent }) => {
     extensions: [ StarterKit.configure({
         bulletList: {
           keepMarks: true,
-          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+          keepAttributes: false, 
         },
         orderedList: {
           keepMarks: true,
-          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+          keepAttributes: false,
         },
       })],
     content: editorContent,
@@ -38,7 +38,7 @@ export const MyEditor = ({ editorContent, onEditorFocus, changeContent }) => {
       changeContent(data.editor.getHTML());
     });
   
-    // Only store unsub if it's a function
+   //clean up function, to avoid memory leak. or when compo is unmounted but listener is still on ll cause error
     if (typeof unsub === 'function') {
       return () => unsub();
     }

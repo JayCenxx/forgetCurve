@@ -5,8 +5,6 @@ import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
 import { IoSwapHorizontal } from "react-icons/io5";
 import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import { debounce } from "../../utils/debounce";

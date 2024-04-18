@@ -11,7 +11,7 @@
       
     }
 
-    /* affect the words inside each editor */
+    /* affect the words inside each editor allow p to move to the right */
     p{
       @apply  pl-2
     }
