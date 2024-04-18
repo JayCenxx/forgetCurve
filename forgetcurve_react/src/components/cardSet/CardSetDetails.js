@@ -43,7 +43,7 @@ const CardSetDetails = ({subject, reviewTime,reviewTerms,stars,totalTerms,views,
     )}
 
       <section className="flex mt-2 items-center justify-center">
-        <div className="text-md text-gray-600 ">{`${reviewTerms} Terms to review in ${reviewTime}`}</div>
+        <div className=" text-md text-gray-600 ">{`${reviewTerms} Terms to review in ${reviewTime}`}</div>
       </section>
 
 

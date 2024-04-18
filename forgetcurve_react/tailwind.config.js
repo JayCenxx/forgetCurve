@@ -6,6 +6,8 @@ module.exports = {
     extend: {
       flexBasis: {
         '1/10': '10%', // Custom flex-basis utility class
+      }, screens: {
+        'h-700': {'raw': '(min-height: 700px)'},
       },
     },
   },
@@ -14,5 +16,5 @@ module.exports = {
      
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

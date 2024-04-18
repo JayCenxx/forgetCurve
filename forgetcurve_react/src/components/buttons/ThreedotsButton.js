@@ -13,8 +13,11 @@ const ThreedotsButton = ({ Icon = FaEllipsisV, Name }) => {
       }
     }
 
+  
     if (isOpen) {
+       // Add event listener when dropdown is open
       document.addEventListener('click', handleClickOutside, true);
+        //a clean up function to remove event listener when compo unmounts or before the effect run again
       return () => document.removeEventListener('click', handleClickOutside, true);
     }
   }, [isOpen]);
