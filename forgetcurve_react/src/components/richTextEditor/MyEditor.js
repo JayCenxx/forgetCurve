@@ -3,10 +3,20 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
+import '../../style/tipTapStyle.css'
 
 export const MyEditor = ({ editorContent, onEditorFocus, changeContent }) => {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [ StarterKit.configure({
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+        },
+      })],
     content: editorContent,
   });
 
@@ -35,8 +45,8 @@ export const MyEditor = ({ editorContent, onEditorFocus, changeContent }) => {
   }, [editor, changeContent]);
 
   return editor ? (
-    <div onFocus={() => onEditorFocus(editor)} className="flex flex-col basis-6/12" >
-      <EditorContent editor={editor} className="mr-2 p-1 border-b-2 border-dash focus:outline-none flex-grow"/>
+    <div onFocus={() => onEditorFocus(editor)} className="flex flex-col basis-6/12 " >
+      <EditorContent editor={editor} className="mr-2  border-b-2 border-gray-400  flex-grow "/>
     </div>
   ) : null;
 };

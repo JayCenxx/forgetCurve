@@ -13,8 +13,8 @@ import { debounce } from "../../utils/debounce";
 const CardDetailsEdit = () => {
   
 
-  const [frontText, setFrontText] = useState('');
-  const [backText, setBackText] = useState('');
+  const [frontText, setFrontText] = useState(`<p></p><p></p>`);
+  const [backText, setBackText] = useState(`<p></p><p></p>`);
   const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";

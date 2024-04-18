@@ -1,0 +1,19 @@
+.tiptap {
+    > * + * {
+      margin-top: 0.75em;
+     
+    }
+  
+    ul,li
+    ol {
+      list-style-type: disc; /* Ensure bullets show */
+      padding-left: 25px;
+      
+    }
+
+    /* affect the words inside each editor */
+    p{
+      @apply  pl-2
+    }
+  }
+

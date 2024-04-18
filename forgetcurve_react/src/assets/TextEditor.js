@@ -4,7 +4,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Editor, EditorProvider, useCurrentEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useState } from "react";
-
+import '../style/tipTapStyle.css'
 
 const TextEditor = () => {
   const { editor } = useCurrentEditor();
