@@ -64,8 +64,9 @@ const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language
         >
           {/* Centered container for the dropdown */}
           <div
-            className=" fixed inset-0 m-auto w-[60vw] max-h-[55%] h-[55%] p-6 overflow-auto rounded-md bg-white shadow-lg grid place-items-center"
+            className=" fixed inset-0 m-auto w-[60vw] max-h-[60%] h-[60%] xl:h-auto  p-6 overflow-auto rounded-md bg-white shadow-lg "
             style={{
+              maxHeight: 'fit-content',
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",

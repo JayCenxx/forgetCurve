@@ -8,7 +8,7 @@ import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import { debounce } from "../../utils/debounce";
-const CardDetailsEdit = () => {
+export const EditCardDetails = ( ) => {
   
 
   const [frontText, setFrontText] = useState(`<p></p><p></p>`);
@@ -80,7 +80,8 @@ useEffect(() => {},[frontLangCode,backText])
 
 
   return (
-    <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white">
+    <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white mt-14">
+      
         <div className="text-editor">
         <Toolbar activeEditor={activeEditor} setActiveEditor={setActiveEditor} />
     </div>
@@ -141,5 +142,4 @@ useEffect(() => {},[frontLangCode,backText])
     </main>
   );
 };
-
-export default CardDetailsEdit;
+ 

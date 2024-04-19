@@ -3,8 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html{
+
+}
+
 body {
-  @apply bg-gray-100; /* Use the Tailwind @apply directive to set the color */
+  @apply bg-gray-100 h-full/* Use the Tailwind @apply directive to set the color */
 }
 
 .ql-toolbar {
