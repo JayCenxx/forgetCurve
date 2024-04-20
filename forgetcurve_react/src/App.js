@@ -3,10 +3,9 @@
 import CardSetMain from "./components/cardSet/CardSetMain";
 import CardSetStructure from "./components/cardSet/CardSetStructure";
 import EditMenuMain from "./components/editMenu/EditMenuMain";
-
 import Header from "./components/header/Header";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
+import "./style/global.css"
 
 function App() {
 

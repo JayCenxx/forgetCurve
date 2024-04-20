@@ -35,16 +35,23 @@ const EditMenuMain = () => {
     });
   };
 
+  function Text(e){
+    console.log(e.nativeEvent.data);
+  }
+
+
   return (
     <>
       <EditMenuTitle />
       
       {cardArray.map((item,index) => (
-        // use react.frag instead of <> cause of props
+        // use react.frag instead of <> cause of props 
         <React.Fragment key={item.id}>
-       <EditCardDetails/> 
-          <button onClick={() => removeArrayItem(item.id)}>Remove</button>
-          <button onClick={() => moveArrayItem(index, index + 1)} disabled={index === cardArray.length - 1}>Move Down</button>
+       <EditCardDetails removeArray={removeArrayItem} moveArray={moveArrayItem} itemId={item.id} indexs={index}/> 
+         
+          <button onClick={() => moveArrayItem(index, index + 1)} disabled={index === cardArray.length }>Move Down</button>
+          <button onClick={() => moveArrayItem(index, index - 1)} disabled={index === cardArray.length }>Move Up</button>
+       
         </React.Fragment>
       ))}
       <button onClick={addArrayItem}> Add Item</button>

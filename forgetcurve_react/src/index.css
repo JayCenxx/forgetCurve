@@ -3,33 +3,5 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
 
-}
-
-body {
-  @apply bg-gray-100 h-full/* Use the Tailwind @apply directive to set the color */
-}
-
-.ql-toolbar {
-  @apply bg-white border border-blue-200 rounded-t-lg;
-}
-
-.ql-container {
-  @apply bg-white border-l border-r border-b rounded-b-lg;
-}
-
-/* Continue to override styles for buttons, dropdowns, active states, etc. */
-.ql-toolbar .ql-formats button {
-  @apply bg-white hover:bg-blue-100 active:bg-blue-200;
-}
-
-/* Specific styles for customizing the toolbar buttons appearance */
-.ql-toolbar button {
-  @apply px-2 py-1 m-1 transition duration-200 ease-in-out;
-}
-
-.ql-toolbar button:hover {
-  @apply bg-gray-100;
-}
 

@@ -8,41 +8,38 @@ import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import { debounce } from "../../utils/debounce";
-export const EditCardDetails = ( ) => {
-  
-
-  const [frontText, setFrontText] = useState(`<p></p><p></p>`);
-  const [backText, setBackText] = useState(`<p></p><p></p>`);
-  const {backLangCode,frontLangCode,setFrontLangCode,setBackLangCode} = useLangCodeStore();
+export const EditCardDetails = ({ removeArray, itemId,moveArray,indexs }) => {
+  const [frontText, setFrontText] = useState(``);
+  const [backText, setBackText] = useState(``);
+  const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
+    useLangCodeStore();
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
-
   const [activeEditor, setActiveEditor] = useState(null);
+  let isAutoDetect=frontLangCode.language === "Auto-Detect" && frontLangCode.langCode === "auto"
 
   const handleEditorFocus = (editor) => {
     setActiveEditor(editor);
   };
 
-  const handleFrontTextEditor = useCallback(debounce(content => {
-    setFrontText(content);
-    console.log(frontText);
-  }, 500), []); // 500 ms delay
+  // this number have to stay at 100ms, otherwise it ll have swapping problem
+  const handleFrontTextEditor = debounce(content => {
+      setFrontText(content ); 
+    }, 100)
+ 
 
-  const handleBackTextEditor = (content) => {
+  const handleBackTextEditor = debounce(content => {
     setBackText(content);
-  };
+  },100)
 
   const handleSwap = () => {
-    // the back end code also need to check this condition, in case hacker change the frontend code. 
-    if(isFrontTextEmpty && isBackTextEmpty){
-      return 
-    }
     // Temporary variables to hold the new values
     const newFrontLangCode = backLangCode;
-    let newBackLangCode = frontLangCode;
-  
+    let newBackLangCode =frontLangCode;
+
     // Check if the language was auto-detected and update accordingly
-    if (frontLangCode.language === "Auto-Detect") {
+    if (frontLangCode.language === "Auto-Detect" ) {
+      console.log(frontLangCode);
       // when the swap button is pressed, assume it detected its English, i want to replace Auto-Detect with English
       //swap to the back, ex. Japanese - English,  instead of  Japanese - Auto Detect
       newBackLangCode = {
@@ -56,14 +53,18 @@ export const EditCardDetails = ( ) => {
     setFrontLangCode(newFrontLangCode);
     setBackLangCode(newBackLangCode);
   };
-  
-useEffect(() => {},[frontLangCode,backText])
+
+  useEffect(() => {}, [frontLangCode, backText]);
   //need the frontText & target translated language type
   const handleTranslation = useCallback(async () => {
     if (isFrontTextEmpty) return;
-    
+
     try {
-      const result = await translateServ(frontText, frontLangCode.langCode, backLangCode.langCode);
+      const result = await translateServ(
+        frontText,
+        frontLangCode.langCode,
+        backLangCode.langCode
+      );
       if (!result.front) {
         setFrontLangCode({
           ...frontLangCode,
@@ -75,29 +76,33 @@ useEffect(() => {},[frontLangCode,backText])
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  }, [frontText, frontLangCode, backLangCode, isFrontTextEmpty]);
-
-
+  }, [frontText,backText, frontLangCode, backLangCode, isFrontTextEmpty]);
 
   return (
-    <main className=" p-4 rounded-lg shadow-lg w-10/12 mx-auto bg-white mt-14">
-      
-        <div className="text-editor">
-        <Toolbar activeEditor={activeEditor} setActiveEditor={setActiveEditor} />
-    </div>
+    <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white mt-14">
+      <section className="text-editor flex space-x-2">
+        <div>
+          <Toolbar
+            activeEditor={activeEditor}
+            setActiveEditor={setActiveEditor}
+          />
+        </div>
+
+        <div>
+          <button onClick={() => removeArray(itemId)}>Remove</button>
+          <input onChange={(e) => moveArray(indexs, parseInt(e.nativeEvent.data)-1)} placeholder="Move to specific index"/>
+        </div>
+      </section>
+
       {/* create a flex container */}
       <main className="flex items-center">
-
         {/* frontText */}
         <section className="flex flex-col basis-6/12">
-     
-   
-          
           <MyEditor
-        editorContent={frontText}
-        onEditorFocus={handleEditorFocus}
-        changeContent={handleFrontTextEditor}
-      />
+            editorContent={frontText}
+            onEditorFocus={handleEditorFocus}
+            changeContent={handleFrontTextEditor}
+          />
 
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Front</h1>
@@ -105,19 +110,26 @@ useEffect(() => {},[frontLangCode,backText])
           </div>
         </section>
         <section className="mr-6 ml-4 text-xl">
-          <button onClick={handleSwap} className={`${isFrontTextEmpty && isBackTextEmpty ? 'text-gray-500' : 'text-black'} `} >
+          <button
+            onClick={handleSwap}
+            className={`${
+              isFrontTextEmpty && isBackTextEmpty
+                ? "text-gray-500"
+                : "text-black"
+            } `}
+            disabled={isAutoDetect|| (isFrontTextEmpty && isBackTextEmpty)}
+          >
             <IoSwapHorizontal />
           </button>
         </section>
         {/* backText */}
         <section className="flex flex-col basis-6/12">
+          <MyEditor
+            editorContent={backText}
+            onEditorFocus={handleEditorFocus}
+            changeContent={handleBackTextEditor}
+          />
 
-           <MyEditor
-        editorContent={backText}
-        onEditorFocus={handleEditorFocus}
-        changeContent={handleBackTextEditor}
-      />
-         
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Back</h1>
 
@@ -132,9 +144,11 @@ useEffect(() => {},[frontLangCode,backText])
               handleTranslation(
                 frontText,
                 frontLangCode.langCode,
-                backLangCode.langCode )}
-                className={`${isFrontTextEmpty ? 'text-gray-500' : 'text-black'} `}
-            >
+                backLangCode.langCode
+              )
+            }
+            className={`${isFrontTextEmpty ? "text-gray-500" : "text-black"} `}
+          >
             translate
           </button>
         </section>
@@ -142,4 +156,3 @@ useEffect(() => {},[frontLangCode,backText])
     </main>
   );
 };
- 
