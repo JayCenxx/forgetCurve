@@ -8,7 +8,8 @@ import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import { debounce } from "../../utils/debounce";
-export const EditCardDetails = ({ removeArray, itemId,moveArray,indexs }) => {
+import { ignoreHTMLRegex } from "../../utils/ignoreHTMLRegex";
+export const EditCardDetails = ({ removeArray, itemId,moveArray,index2,cardArray2,addArrayItem2 }) => {
   const [frontText, setFrontText] = useState(``);
   const [backText, setBackText] = useState(``);
   const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
@@ -19,18 +20,31 @@ export const EditCardDetails = ({ removeArray, itemId,moveArray,indexs }) => {
   let isAutoDetect=frontLangCode.language === "Auto-Detect" && frontLangCode.langCode === "auto"
 
   const handleEditorFocus = (editor) => {
+
     setActiveEditor(editor);
   };
 
-  // this number have to stay at 100ms, otherwise it ll have swapping problem
+  // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
   const handleFrontTextEditor = debounce(content => {
+    isLengthBiggerThanOne(content)
+   
       setFrontText(content ); 
     }, 100)
  
 
   const handleBackTextEditor = debounce(content => {
+    isLengthBiggerThanOne(content)
     setBackText(content);
   },100)
+
+const isLengthBiggerThanOne=text=>{
+// if either front or backText more than 1 character & it's the last CardDetail JSX then to add another JSX
+  if(ignoreHTMLRegex(text).length>=1 && index2===cardArray2.length-1){
+
+    addArrayItem2()
+  }
+}
+
 
   const handleSwap = () => {
     // Temporary variables to hold the new values
@@ -90,7 +104,9 @@ export const EditCardDetails = ({ removeArray, itemId,moveArray,indexs }) => {
 
         <div>
           <button onClick={() => removeArray(itemId)}>Remove</button>
-          <input onChange={(e) => moveArray(indexs, parseInt(e.nativeEvent.data)-1)} placeholder="Move to specific index"/>
+          <input onChange={(e) => moveArray(index2, parseInt(e.nativeEvent.data)-1)} placeholder="Move to specific index"/>
+          <button onClick={() => moveArray(index2, index2 - 1)} disabled={index2 === cardArray2.length }>Move Up</button>
+          <button onClick={() => moveArray(index2, index2 + 1)} disabled={index2 === cardArray2.length }>Move Down</button>
         </div>
       </section>
 

@@ -43,18 +43,19 @@ const EditMenuMain = () => {
   return (
     <>
       <EditMenuTitle />
-      
+         {/* i need to able to check the last card/length if the frontText is >1 character then add another card below
+      length ~,  down in EditCard, when ever index===length-1 && frontText> 1 && backText>1,if true then trigger addArrayItem
+      make sure the html tag are trimmed, now u can check if the text> 1
+      */}
       {cardArray.map((item,index) => (
         // use react.frag instead of <> cause of props 
         <React.Fragment key={item.id}>
-       <EditCardDetails removeArray={removeArrayItem} moveArray={moveArrayItem} itemId={item.id} indexs={index}/> 
-         
-          <button onClick={() => moveArrayItem(index, index + 1)} disabled={index === cardArray.length }>Move Down</button>
-          <button onClick={() => moveArrayItem(index, index - 1)} disabled={index === cardArray.length }>Move Up</button>
-       
+       <EditCardDetails removeArray={removeArrayItem} moveArray={moveArrayItem} itemId={item.id} index2={index} 
+       cardArray2={cardArray} addArrayItem2={addArrayItem}/> 
+
         </React.Fragment>
-      ))}
-      <button onClick={addArrayItem}> Add Item</button>
+      ))} 
+   
     </>
   );
 };

@@ -30,7 +30,8 @@ const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } = useLa
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (refs.current && !refs.current.contains(e.target)) {
+      // refs.current is pointing at <button>, it's not the parent of the language, so if u click anywhere else, it ll close the model. 
+      if (!refs.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
