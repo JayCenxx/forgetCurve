@@ -1,5 +1,5 @@
 // CardDetailsEdit.js
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import translateServ from "../../services/translationServ";
 import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
@@ -12,23 +12,20 @@ import { ignoreHTMLRegex } from "../../utils/ignoreHTMLRegex";
 import useCardArrayStore from "../../stores/useCardArrayStore";
 export const EditCardDetails = ({ itemId, index2 }) => {
   const {
-    cardArray,
-    addNewCardJSX,
-    removeCardJSX,
-    moveCardJSX,
-    setFrontText,
-    setBackText,
+    cardArray,addNewCardJSX, removeCardJSX,
+    moveCardJSX,setFrontText, setBackText,
   } = useCardArrayStore();
   const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
     useLangCodeStore();
   const { frontText, backText } = cardArray[index2];
-
+  const frontHasRun = useRef(false);
+  const backHasRun = useRef(false);
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
   const [activeEditor, setActiveEditor] = useState(null);
-  let isAutoDetect =
-    frontLangCode.language === "Auto-Detect" &&
-    frontLangCode.langCode === "auto";
+
+  let isAutoDetect = frontLangCode.language === "Auto-Detect" 
+                      && frontLangCode.langCode === "auto";
 
   const handleEditorFocus = (editor) => {
     setActiveEditor(editor);
@@ -36,13 +33,21 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
   // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
   const handleFrontTextEditor = debounce((content) => {
+    console.log('hi' );
+    if (!frontHasRun.current) {
     isLengthBiggerThanOne(content);
+    frontHasRun.current = true; // Set the ref to true after running
+  }
 
     setFrontText(index2, content);
   }, 100);
 
   const handleBackTextEditor = debounce((content) => {
+    if (!backHasRun.current) {
     isLengthBiggerThanOne(content);
+    backHasRun.current = true; // Set the ref to true after running
+  }
+
     setBackText(index2, content);
   }, 100);
 
@@ -51,7 +56,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     if (ignoreHTMLRegex(text).length >= 1 && index2 === cardArray.length - 1) {
       addNewCardJSX();
     }
-  };
+  }
 
   const handleSwap = () => {
     // Temporary variables to hold the new values
@@ -59,8 +64,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     let newBackLangCode = frontLangCode;
 
     // Check if the language was auto-detected and update accordingly
-    if (frontLangCode.language === "Auto-Detect") {
-      console.log(frontLangCode);
+    if (frontLangCode.language === "Auto-Detect") { 
       // when the swap button is pressed, assume it detected its English, i want to replace Auto-Detect with English
       //swap to the back, ex. Japanese - English,  instead of  Japanese - Auto Detect
       newBackLangCode = {
@@ -102,7 +106,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   }, [frontText, backText, frontLangCode, backLangCode, isFrontTextEmpty]);
 
   return (
-    <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white mt-14">
+    <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white my-8">
       <section className="text-editor flex space-x-2">
         <div>
           <Toolbar

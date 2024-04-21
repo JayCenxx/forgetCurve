@@ -4,10 +4,10 @@ import { EditCardDetails } from "./EditCardDetails";
 import cardArrayServ from "../../services/cardArrayServ";
 import useCardArrayStore from "../../stores/useCardArrayStore";
 const EditMenuMain = () => {
-const{cardArray,addNewCardJSX,removeCardJSX,moveCardJSX}=useCardArrayStore()
-
+ 
+const cardArray =useCardArrayStore(i=>i.cardArray)
   // Initialize with one item with a unique ID
-console.log(cardArray);
+ 
 
   const saveCardArray=()=>{
 

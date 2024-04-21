@@ -3,23 +3,27 @@ import { cardJson } from '../assets/cardJson';
 
 
 
-const initialCardArray = cardJson.length === 0 ? [{ id: Date.now() }] : cardJson;
+const initialCardArray = cardJson.length === 0 ? [{ id: Date.now(),frontText:"",backText:"" }] : [...cardJson,{ id: Date.now(),frontText:"",backText:"" }];
 
 const useCardArrayStore = create((set, get) => ({
   cardArray: initialCardArray,
     // add an extra JSX
-  addNewCardJSX: ()=>set(oldState=>({cardArray:[...oldState.cardArray,{id: Date.now()} ]})),
+  addNewCardJSX: ()=>set(oldState=>({cardArray:[...oldState.cardArray,{id: Date.now(),frontText:"",backText:""} ]})),
 //   remove a cardJSX by index, filter's predicate ll exclude the one we want, and include the rest of the elements
   removeCardJSX:  (id)=>set(oldState=>({cardArray:oldState.cardArray.filter(item => item.id !== id)    })),
 //move JSX to x position
   moveCardJSX:  (fromIndex, toIndex)=>set(oldState=> {
-    const cardArray = [...oldState.cardArray];
-    if (toIndex < 0 || toIndex >= cardArray.length || fromIndex === toIndex) {
-      return;
-    }
-    const itemToMove = cardArray.splice(fromIndex, 1)[0];
-    cardArray.splice(toIndex, 0, itemToMove);
-    return { cardArray };
+    const {cardArray} = oldState
+    if (toIndex < 0 || toIndex >= cardArray.length || fromIndex === toIndex || typeof toIndex!== "number") {
+        console.log("invalid number");
+        // make sure the turn the old cardArray, otherwise there ll be bugs
+      return cardArray;
+    }  
+    const newItems = [...cardArray];
+    const itemToMove = newItems.splice(fromIndex, 1)[0]; // Remove the item from the current position
+    newItems.splice(toIndex, 0, itemToMove); // Insert the item at the target position
+    
+    return {cardArray:newItems}; 
       }
 ),
 setFrontText:(frontText,index)=>set(state => {
