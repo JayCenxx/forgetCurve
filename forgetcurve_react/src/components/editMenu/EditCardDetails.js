@@ -18,8 +18,6 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
     useLangCodeStore();
   const { frontText, backText } = cardArray[index2];
-  const frontHasRun = useRef(false);
-  const backHasRun = useRef(false);
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
   const [activeEditor, setActiveEditor] = useState(null);
@@ -32,28 +30,25 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   };
 
   // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
-  const handleFrontTextEditor = debounce((content) => {
-    console.log('hi' );
-    if (!frontHasRun.current) {
-    isLengthBiggerThanOne(content);
-    frontHasRun.current = true; // Set the ref to true after running
+  const handleFrontTextEditor = (content) => {
+    setFrontText(index2, content); 
   }
-
-    setFrontText(index2, content);
-  }, 100);
-
-  const handleBackTextEditor = debounce((content) => {
-    if (!backHasRun.current) {
-    isLengthBiggerThanOne(content);
-    backHasRun.current = true; // Set the ref to true after running
-  }
-
+ 
+  const handleBackTextEditor = (content) => { 
     setBackText(index2, content);
-  }, 100);
+  }
 
-  const isLengthBiggerThanOne = (text) => {
+  const handleClickFront = () => {
+    isLengthBiggerThanOne(frontText);
+  };
+
+  const handleClickBack = () => {
+    isLengthBiggerThanOne(backText);
+  };
+
+  const isLengthBiggerThanOne = () => {
     // if either front or backText more than 1 character & it's the last CardDetail JSX then to add another JSX
-    if (ignoreHTMLRegex(text).length >= 1 && index2 === cardArray.length - 1) {
+    if (index2 === cardArray.length - 1) {
       addNewCardJSX();
     }
   }
@@ -142,12 +137,13 @@ export const EditCardDetails = ({ itemId, index2 }) => {
       <main className="flex items-center">
         {/* frontText */}
         <section className="flex flex-col basis-6/12">
+        <div onClick={handleClickFront}>
           <MyEditor
             editorContent={frontText}
             onEditorFocus={handleEditorFocus}
             changeContent={handleFrontTextEditor}
           />
-
+        </div>
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Front</h1>
             <LangDropdown isAutoDetectFront={true} />
@@ -168,12 +164,14 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         </section>
         {/* backText */}
         <section className="flex flex-col basis-6/12">
+
+        <div onClick={handleClickBack}>
           <MyEditor
             editorContent={backText}
             onEditorFocus={handleEditorFocus}
             changeContent={handleBackTextEditor}
           />
-
+</div>
           <div className="flex justify-between">
             <h1 className="ml-1 text-gray-500">Back</h1>
 
