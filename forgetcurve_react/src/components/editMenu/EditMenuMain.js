@@ -1,61 +1,41 @@
 import React, { useState } from "react";
 import EditMenuTitle from "./EditMenuTitle";
-import {EditCardDetails} from "./EditCardDetails"
+import { EditCardDetails } from "./EditCardDetails";
+import cardArrayServ from "../../services/cardArrayServ";
+import useCardArrayStore from "../../stores/useCardArrayStore";
 const EditMenuMain = () => {
+const{cardArray,addNewCardJSX,removeCardJSX,moveCardJSX}=useCardArrayStore()
+
   // Initialize with one item with a unique ID
-  const [cardArray, setCardArray] = useState([{ id: Date.now() }]); 
+console.log(cardArray);
 
-  // Function to add a new MenuItem with a unique key
-  const addArrayItem = () => {
-    setCardArray([...cardArray, { id: Date.now() }]); // Use current timestamp for uniqueness
-  
-  };
+  const saveCardArray=()=>{
 
-  // Function to remove a MenuItem by ID
-  const removeArrayItem = id => {
-    setCardArray(cardArray.filter(item => item.id !== id));
-   
-  };
-
-  const moveArrayItem = (fromIndex, toIndex) => {
-    if (toIndex < 0 || toIndex >= cardArray.length) {
-      console.log('Target index out of bounds');
-      return; // Early return if the target index is out of range
-    }
-    if (fromIndex === toIndex) {
-      console.log('Item is already at the target index');
-      return; // Early return if the item is already at the desired position
-    }
-  
-    setCardArray( (prevItems) => {
-      const newItems = [...prevItems];
-      const itemToMove = newItems.splice(fromIndex, 1)[0]; // Remove the item from the current position
-      newItems.splice(toIndex, 0, itemToMove); // Insert the item at the target position
-      return newItems; // Return the new array to update the state
-    });
-  };
-
-  function Text(e){
-    console.log(e.nativeEvent.data);
+    // cardArrayServ();
   }
-
 
   return (
     <>
-      <EditMenuTitle />
-         {/* i need to able to check the last card/length if the frontText is >1 character then add another card below
-      length ~,  down in EditCard, when ever index===length-1 && frontText> 1 && backText>1,if true then trigger addArrayItem
-      make sure the html tag are trimmed, now u can check if the text> 1
-      */}
-      {cardArray.map((item,index) => (
-        // use react.frag instead of <> cause of props 
-        <React.Fragment key={item.id}>
-       <EditCardDetails removeArray={removeArrayItem} moveArray={moveArrayItem} itemId={item.id} index2={index} 
-       cardArray2={cardArray} addArrayItem2={addArrayItem}/> 
+      {/* create a return and save button   */}
 
+      <section className="flex flex-row pt-10 justify-center">
+      {/* <div className="basis-[15%]" /> */}
+      <button className="btn bg-white shadow-lg text-lg">Go Back</button>
+        <div className="basis-5/12 md:basis-[50%]  xl:basis-[60%]" />
+
+        {/* send this as the array as a get request & also check if front & backText fields if they r empty */}
+        <button className="btn bg-white shadow-lg text-lg">Save</button>
+      </section>
+      <EditMenuTitle />
+      {cardArray.map((item, index) => (
+        // use react.frag instead of <> cause of props
+        <React.Fragment key={item.id}>
+          <EditCardDetails
+            itemId={item.id}
+            index2={index}
+          />
         </React.Fragment>
-      ))} 
-   
+      ))}
     </>
   );
 };

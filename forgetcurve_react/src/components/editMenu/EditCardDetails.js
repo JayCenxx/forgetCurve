@@ -9,50 +9,57 @@ import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import { debounce } from "../../utils/debounce";
 import { ignoreHTMLRegex } from "../../utils/ignoreHTMLRegex";
-export const EditCardDetails = ({ removeArray, itemId,moveArray,index2,cardArray2,addArrayItem2 }) => {
-  const [frontText, setFrontText] = useState(``);
-  const [backText, setBackText] = useState(``);
+import useCardArrayStore from "../../stores/useCardArrayStore";
+export const EditCardDetails = ({ itemId, index2 }) => {
+  const {
+    cardArray,
+    addNewCardJSX,
+    removeCardJSX,
+    moveCardJSX,
+    setFrontText,
+    setBackText,
+  } = useCardArrayStore();
   const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
     useLangCodeStore();
+  const { frontText, backText } = cardArray[index2];
+
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
   const [activeEditor, setActiveEditor] = useState(null);
-  let isAutoDetect=frontLangCode.language === "Auto-Detect" && frontLangCode.langCode === "auto"
+  let isAutoDetect =
+    frontLangCode.language === "Auto-Detect" &&
+    frontLangCode.langCode === "auto";
 
   const handleEditorFocus = (editor) => {
-
     setActiveEditor(editor);
   };
 
   // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
-  const handleFrontTextEditor = debounce(content => {
-    isLengthBiggerThanOne(content)
-   
-      setFrontText(content ); 
-    }, 100)
- 
+  const handleFrontTextEditor = debounce((content) => {
+    isLengthBiggerThanOne(content);
 
-  const handleBackTextEditor = debounce(content => {
-    isLengthBiggerThanOne(content)
-    setBackText(content);
-  },100)
+    setFrontText(index2, content);
+  }, 100);
 
-const isLengthBiggerThanOne=text=>{
-// if either front or backText more than 1 character & it's the last CardDetail JSX then to add another JSX
-  if(ignoreHTMLRegex(text).length>=1 && index2===cardArray2.length-1){
+  const handleBackTextEditor = debounce((content) => {
+    isLengthBiggerThanOne(content);
+    setBackText(index2, content);
+  }, 100);
 
-    addArrayItem2()
-  }
-}
-
+  const isLengthBiggerThanOne = (text) => {
+    // if either front or backText more than 1 character & it's the last CardDetail JSX then to add another JSX
+    if (ignoreHTMLRegex(text).length >= 1 && index2 === cardArray.length - 1) {
+      addNewCardJSX();
+    }
+  };
 
   const handleSwap = () => {
     // Temporary variables to hold the new values
     const newFrontLangCode = backLangCode;
-    let newBackLangCode =frontLangCode;
+    let newBackLangCode = frontLangCode;
 
     // Check if the language was auto-detected and update accordingly
-    if (frontLangCode.language === "Auto-Detect" ) {
+    if (frontLangCode.language === "Auto-Detect") {
       console.log(frontLangCode);
       // when the swap button is pressed, assume it detected its English, i want to replace Auto-Detect with English
       //swap to the back, ex. Japanese - English,  instead of  Japanese - Auto Detect
@@ -62,14 +69,15 @@ const isLengthBiggerThanOne=text=>{
       };
     }
     // Set the new values to state
-    setFrontText(backText);
-    setBackText(frontText);
+    setFrontText(index2, backText);
+    setBackText(index2, frontText);
     setFrontLangCode(newFrontLangCode);
     setBackLangCode(newBackLangCode);
   };
 
   useEffect(() => {}, [frontLangCode, backText]);
   //need the frontText & target translated language type
+
   const handleTranslation = useCallback(async () => {
     if (isFrontTextEmpty) return;
 
@@ -79,18 +87,19 @@ const isLengthBiggerThanOne=text=>{
         frontLangCode.langCode,
         backLangCode.langCode
       );
+
       if (!result.front) {
         setFrontLangCode({
           ...frontLangCode,
           langCode: result.detectedLanguageCode,
         });
       }
-      setBackText(result.translatedText); // This updates the backText state
+      setBackText(index2,result.translatedText); // This updates the backText state
     } catch (error) {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  }, [frontText,backText, frontLangCode, backLangCode, isFrontTextEmpty]);
+  }, [frontText, backText, frontLangCode, backLangCode, isFrontTextEmpty]);
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white mt-14">
@@ -103,10 +112,25 @@ const isLengthBiggerThanOne=text=>{
         </div>
 
         <div>
-          <button onClick={() => removeArray(itemId)}>Remove</button>
-          <input onChange={(e) => moveArray(index2, parseInt(e.nativeEvent.data)-1)} placeholder="Move to specific index"/>
-          <button onClick={() => moveArray(index2, index2 - 1)} disabled={index2 === cardArray2.length }>Move Up</button>
-          <button onClick={() => moveArray(index2, index2 + 1)} disabled={index2 === cardArray2.length }>Move Down</button>
+          <button onClick={() => removeCardJSX(itemId)}>Remove</button>
+          <input
+            onChange={(e) =>
+              moveCardJSX(index2, parseInt(e.nativeEvent.data) - 1)
+            }
+            placeholder="Move to specific index"
+          />
+          <button
+            onClick={() => moveCardJSX(index2, index2 - 1)}
+            disabled={index2 === cardArray.length}
+          >
+            Move Up
+          </button>
+          <button
+            onClick={() => moveCardJSX(index2, index2 + 1)}
+            disabled={index2 === cardArray.length}
+          >
+            Move Down
+          </button>
         </div>
       </section>
 
@@ -133,7 +157,7 @@ const isLengthBiggerThanOne=text=>{
                 ? "text-gray-500"
                 : "text-black"
             } `}
-            disabled={isAutoDetect|| (isFrontTextEmpty && isBackTextEmpty)}
+            disabled={isAutoDetect || (isFrontTextEmpty && isBackTextEmpty)}
           >
             <IoSwapHorizontal />
           </button>
