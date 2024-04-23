@@ -14,7 +14,8 @@ const useCardArrayStore = create((set, get) => ({
 //move JSX to x position
   moveCardJSX:  (fromIndex, toIndex)=>set(oldState=> {
     const {cardArray} = oldState
-    if (toIndex < 0 || toIndex >= cardArray.length || fromIndex === toIndex || typeof toIndex!== "number") {
+  console.log(fromIndex, toIndex);
+    if (toIndex < 0 || toIndex > cardArray.length || fromIndex === toIndex || typeof toIndex!== "number") {
         console.log("invalid number");
         // make sure the turn the old cardArray, otherwise there ll be bugs
       return cardArray;
