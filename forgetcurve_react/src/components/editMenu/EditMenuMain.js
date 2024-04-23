@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import EditMenuTitle from "./EditMenuTitle";
-import { EditCardDetails } from "./EditCardDetails";
-import cardArrayServ from "../../services/cardArrayServ";
+import { EditCardDetails } from "./EditCardDetails"; 
 import useCardArrayStore from "../../stores/useCardArrayStore";
+
 const EditMenuMain = () => {
  
 const cardArray =useCardArrayStore(i=>i.cardArray)

@@ -63,9 +63,9 @@ const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language
           className="fixed inset-0 z-10 "
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          {/* Centered container for the dropdown */}
+          {/* Centered container for the dropdown, can add xl:h-auto but not ideal */}
           <div
-            className=" fixed inset-0 m-auto w-[60vw] max-h-[60%] h-[60%] xl:h-auto  p-6 overflow-auto rounded-md bg-white shadow-lg "
+            className=" fixed inset-0 m-auto w-[60vw] max-h-[60%] h-[60%]   p-6 overflow-auto rounded-md bg-white shadow-lg "
             style={{
               maxHeight: 'fit-content',
               top: "50%",

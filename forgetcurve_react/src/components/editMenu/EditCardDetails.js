@@ -6,10 +6,14 @@ import useLangCodeStore from "../../stores/useLangCodeStore";
 import { IoSwapHorizontal } from "react-icons/io5";
 import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import { MyEditor } from "../richTextEditor/MyEditor";
-import { Toolbar } from "../richTextEditor/Toolbar";
-import { debounce } from "../../utils/debounce";
-import { ignoreHTMLRegex } from "../../utils/ignoreHTMLRegex";
+import { Toolbar } from "../richTextEditor/Toolbar"; 
 import useCardArrayStore from "../../stores/useCardArrayStore";
+import { IoArrowUpSharp,IoArrowDownSharp,IoMove } from "react-icons/io5";
+
+import { FaRegTrashCan } from "react-icons/fa6";
+
+
+
 export const EditCardDetails = ({ itemId, index2 }) => {
   const {
     cardArray,addNewCardJSX, removeCardJSX,
@@ -17,6 +21,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   } = useCardArrayStore();
   const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
     useLangCodeStore();
+    // only pull the frontText & backText 
   const { frontText, backText } = cardArray[index2];
   const isFrontTextEmpty = frontText.trim() === "";
   const isBackTextEmpty = backText.trim() === "";
@@ -52,16 +57,14 @@ export const EditCardDetails = ({ itemId, index2 }) => {
       addNewCardJSX();
     }
   }
-
+  
   const handleSwap = () => {
     // Temporary variables to hold the new values
     const newFrontLangCode = backLangCode;
     let newBackLangCode = frontLangCode;
-
+  
     // Check if the language was auto-detected and update accordingly
-    if (frontLangCode.language === "Auto-Detect") { 
-      // when the swap button is pressed, assume it detected its English, i want to replace Auto-Detect with English
-      //swap to the back, ex. Japanese - English,  instead of  Japanese - Auto Detect
+    if (frontLangCode.language === "Auto-Detect") {
       newBackLangCode = {
         ...frontLangCode,
         language: findLanguageWithLangCode(frontLangCode.langCode),
@@ -74,7 +77,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     setBackLangCode(newBackLangCode);
   };
 
-  useEffect(() => {}, [frontLangCode, backText]);
+  useEffect(() => {}, [frontLangCode, backText,frontText]);
   //need the frontText & target translated language type
 
   const handleTranslation = useCallback(async () => {
@@ -111,27 +114,46 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         </div>
 
         <div>
-          <button onClick={() => removeCardJSX(itemId)}>Remove</button>
-          <input
+          <button onClick={() => removeCardJSX(itemId)} className="text-xl">
+            <FaRegTrashCan/> 
+            </button>
+
+            <button className="text-xl" onClick={()=>document.getElementById('my_modal_2').showModal()}>
+              <IoMove/>
+            </button>
+        <dialog id="my_modal_2" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Hello!</h3>
+            <p className="py-4">Press ESC key or click outside to close</p>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
+
+          {/* <input
             onChange={(e) =>
               moveCardJSX(index2, parseInt(e.nativeEvent.data) - 1)
             }
             placeholder="Move to specific index"
-          />
+          /> */}
+
           <button
             onClick={() => moveCardJSX(index2, index2 - 1)}
             disabled={index2 === cardArray.length}
           >
-            Move Up
+            <IoArrowUpSharp className="text-xl"/>
           </button>
           <button
             onClick={() => moveCardJSX(index2, index2 + 1)}
             disabled={index2 === cardArray.length}
           >
-            Move Down
+            <IoArrowDownSharp className="text-xl"/>
           </button>
         </div>
       </section>
+
+
 
       {/* create a flex container */}
       <main className="flex items-center">
@@ -149,6 +171,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
             <LangDropdown isAutoDetectFront={true} />
           </div>
         </section>
+
         <section className="mr-6 ml-4 text-xl">
           <button
             onClick={handleSwap}
