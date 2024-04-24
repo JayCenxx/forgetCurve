@@ -32,8 +32,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   const [activeEditor, setActiveEditor] = useState(null);
   let isAutoDetect =
     frontLangCode.language === "Auto-Detect" &&
-    frontLangCode.langCode === "auto";
-    
+    frontLangCode.langCode === "auto"; 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => {
@@ -137,7 +136,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
           </button>
         </div>
 
-        {/* move button */}
+    
         <div className="">
           <button className="text-xl" onClick={openModal}>
             <IoMove />
@@ -150,6 +149,8 @@ export const EditCardDetails = ({ itemId, index2 }) => {
             close={closeModal}
           />
         </div>
+
+        
         <div>
           <button
             onClick={() => moveCardJSX(index2, index2 - 1)}
