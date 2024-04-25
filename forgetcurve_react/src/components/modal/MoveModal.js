@@ -15,6 +15,7 @@ export const MoveModal = ({ index3, isOpen, close, moveCardJSX }) => {
         }
       };
 
+      // mousedown mean mouse leftclick down
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);

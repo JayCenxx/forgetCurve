@@ -7,6 +7,7 @@ const initialCardArray = cardJson.length === 0 ? [{ id: Date.now(),frontText:"",
 
 const useCardArrayStore = create((set, get) => ({
   cardArray: initialCardArray,
+  setCardArray: newArray=>set({cardArray:newArray}),
     // add an extra JSX
   addNewCardJSX: ()=>set(oldState=>({cardArray:[...oldState.cardArray,{id: Date.now(),frontText:"",backText:""} ]})),
 //   remove a cardJSX by index, filter's predicate ll exclude the one we want, and include the rest of the elements
@@ -29,6 +30,7 @@ const useCardArrayStore = create((set, get) => ({
 ),
 setFrontText:(frontText,index)=>set(state => {
     // Make a shallow copy of the cardArray
+    
     const newCardArray = [...state.cardArray];
 
     // Check if the index is valid
@@ -37,7 +39,7 @@ setFrontText:(frontText,index)=>set(state => {
       const newCard = { ...newCardArray[index], frontText };
 
       // Replace the card at the specified index
-      newCardArray[index] = newCard;
+      newCardArray[index] = newCard; 
     }
 
     // Return the new state

@@ -23,17 +23,21 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     setFrontText,
     setBackText,
   } = useCardArrayStore();
-  const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } =
+  const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode ,setCardArray} =
     useLangCodeStore();
-  // only pull the frontText & backText
+  // only pull the localFrontText & localBackText
   const { frontText, backText } = cardArray[index2];
-  const isFrontTextEmpty = frontText.trim() === "";
-  const isBackTextEmpty = backText.trim() === "";
+  const [localFrontText,setLocalFrontText]=useState("")
+  const [localBackText,setLocalBackText]=useState("")
+  const isFrontTextEmpty = localFrontText.trim() === "";
+  const isBackTextEmpty = localBackText.trim() === "";
   const [activeEditor, setActiveEditor] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   let isAutoDetect =
     frontLangCode.language === "Auto-Detect" &&
     frontLangCode.langCode === "auto"; 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+     
 
     const openModal = () => {
       setIsModalOpen(true);
@@ -44,6 +48,10 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     };
 
 
+    useEffect(() => {
+    
+      console.log(cardArray)
+    }, [cardArray]);
 
   const handleEditorFocus = (editor) => {
     setActiveEditor(editor);
@@ -51,23 +59,22 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
   // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
   const handleFrontTextEditor = (content) => {
-    setFrontText(index2, content);
+    setLocalFrontText(content ); 
+ 
+
+  };
+  const blurSetFront = () => {
+    setFrontText(localFrontText, index2 );
   };
 
   const handleBackTextEditor = (content) => {
-    setBackText(index2, content);
+    setLocalBackText(content);
   };
+ 
 
-  const handleClickFront = () => {
-    isLengthBiggerThanOne(frontText);
-  };
-
-  const handleClickBack = () => {
-    isLengthBiggerThanOne(backText);
-  };
-
+  // if last card JSX, upon click add another one
   const isLengthBiggerThanOne = () => {
-    // if either front or backText more than 1 character & it's the last CardDetail JSX then to add another JSX
+    // if either front or localBackText more than 1 character & it's the last CardDetail JSX then to add another JSX
     if (index2 === cardArray.length - 1) {
       addNewCardJSX();
     }
@@ -76,9 +83,8 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   const handleSwap = () => {
     // Temporary variables to hold the new values
     const newFrontLangCode = backLangCode;
-    let newBackLangCode = frontLangCode;
-
-    // Check if the language was auto-detected and update accordingly
+    let newBackLangCode = frontLangCode; 
+    // Check if the language was auto-detected and update based on the localFrontText
     if (frontLangCode.language === "Auto-Detect") {
       newBackLangCode = {
         ...frontLangCode,
@@ -86,21 +92,27 @@ export const EditCardDetails = ({ itemId, index2 }) => {
       };
     }
     // Set the new values to state
-    setFrontText(index2, backText);
-    setBackText(index2, frontText);
+    console.log(localBackText,localFrontText);
+    setLocalFrontText( localBackText);
+    setLocalBackText( localFrontText);
     setFrontLangCode(newFrontLangCode);
     setBackLangCode(newBackLangCode);
   };
 
-  useEffect(() => {}, [frontLangCode, frontText]);
-  //need the frontText & target translated language type
+  //   load it once all the data from the backend Array
+  useEffect(() => {
+    setLocalFrontText(frontText )
+    setLocalBackText(backText )
+ 
+  }, []);
 
+  //need the localFrontText & target translated language type
   const handleTranslation = useCallback(async () => {
     if (isFrontTextEmpty) return;
 
     try {
       const result = await translateServ(
-        frontText,
+        localFrontText,
         frontLangCode.langCode,
         backLangCode.langCode
       );
@@ -111,12 +123,12 @@ export const EditCardDetails = ({ itemId, index2 }) => {
           langCode: result.detectedLanguageCode,
         });
       }
-      setBackText(index2, result.translatedText); // This updates the backText state
+      setLocalBackText(index2, result.translatedText); // This updates the localBackText state
     } catch (error) {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  }, [frontText, backText, frontLangCode, backLangCode, isFrontTextEmpty]);
+  }, [localFrontText, localBackText, frontLangCode, backLangCode, isFrontTextEmpty]);
 
 
 
@@ -172,11 +184,11 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
       {/* create a flex container */}
       <main className="flex items-center">
-        {/* frontText */}
+        {/* localFrontText */}
         <section className="flex flex-col basis-6/12">
-          <div onClick={handleClickFront}>
+          <div onClick={isLengthBiggerThanOne} onBlur={blurSetFront}>
             <MyEditor
-              editorContent={frontText}
+              editorContent={localFrontText}
               onEditorFocus={handleEditorFocus}
               changeContent={handleFrontTextEditor}
             />
@@ -195,16 +207,16 @@ export const EditCardDetails = ({ itemId, index2 }) => {
                 ? "text-gray-500"
                 : "text-black"
             } `}
-            disabled={isAutoDetect || (isFrontTextEmpty && isBackTextEmpty)}
+            
           >
             <IoSwapHorizontal />
           </button>
         </section>
-        {/* backText */}
+        {/* localBackText */}
         <section className="flex flex-col basis-6/12">
-          <div onClick={handleClickBack}>
+          <div onClick={isLengthBiggerThanOne}>
             <MyEditor
-              editorContent={backText}
+              editorContent={localBackText}
               onEditorFocus={handleEditorFocus}
               changeContent={handleBackTextEditor}
             />
@@ -217,11 +229,11 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         </section>
 
         <section>
-          {/* send backText the langcode backText to this button  */}
+          {/* send localBackText the langcode localBackText to this button  */}
           <button
             onClick={() =>
               handleTranslation(
-                frontText,
+                localFrontText,
                 frontLangCode.langCode,
                 backLangCode.langCode
               )
