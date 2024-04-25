@@ -21,12 +21,7 @@ const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } = useLa
   };
 
   //i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
-  useEffect(() => {
-    if (isAutoDetectFront) {
-      setFrontLangCode({ language: "Auto-Detect", langCode: "auto" });
-      setBackLangCode({language: "English",langCode: "en" });
-    }
-  }, []);
+ 
 
   useEffect(() => {
     const handleClickOutside = (e) => {

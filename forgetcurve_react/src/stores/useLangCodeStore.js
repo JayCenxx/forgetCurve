@@ -6,8 +6,8 @@ frontLangCode:{
     "language":"Auto-Detect",
     "langCode":"auto"},
   backLangCode: {
-    "language":"",
-    "langCode":""},
+    "language":"English",
+    "langCode":"en"},
   setFrontLangCode:newlangCode => set({ frontLangCode: newlangCode }), 
   setBackLangCode: newlangCode => set({ backLangCode: newlangCode }), 
 }))
