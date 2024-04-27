@@ -101,13 +101,6 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   };
   
    
-
-  // //   it also populate the swap fronText and backText
-  // useEffect(() => {
-  //   setLocalFrontText(frontText )
-  //   setLocalBackText(backText ) 
-  // }, []);
-
   //need the localFrontText & target translated language type
   const handleTranslation = useCallback(async () => {
  
@@ -135,53 +128,71 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
   return (
     <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white my-8">
-      <section className="text-editor flex space-x-2">
-        <div>
-          <Toolbar
-            activeEditor={activeEditor}
-            setActiveEditor={setActiveEditor} />
-        </div>
+      <section className="text-editor flex space-x-2  ">
+        <section className="flex basis-1/3 space-x-1">
+          <div className="">
+            <h1 className="text-xl -mt-1">
+            { index2+1}
+          </h1>
+          </div>
+       
+        <span className="basis-[4%] "></span>
+          {/* move button */}
+          <div  >
+            <button className="text-xl " onClick={openModal}>
+              <IoMove />
+            </button>
+
+            <MoveModal
+              index3={index2}
+              moveCardJSX={moveCardJSX}
+              isOpen={isModalOpen}
+              close={closeModal} />
+          </div>
+
+          
+          <div>
+            <button
+              onClick={() => moveCardJSX(index2, index2 - 1)}
+              disabled={index2 === cardArray.length}
+            >
+              <IoArrowUpSharp className="text-xl" />
+            </button>
+          </div>
+
+          <div>
+            <button
+              onClick={() => moveCardJSX(index2, index2 + 1)}
+              disabled={index2 === cardArray.length} >
+              <IoArrowDownSharp className="text-xl" />
+            </button>
+          </div>
+          </section >
+
+          <section className="basis-1/3  flex justify-center"> 
+            <div  className="mr-6" >
+              <Toolbar
+                activeEditor={activeEditor}
+                setActiveEditor={setActiveEditor} />
+            </div>
+          </section>
 
 
-        <div>
-          <button onClick={() => removeCardJSX(itemId)} className="text-xl">
-            <FaRegTrashCan />
-          </button>
-        </div>
 
-    
-        <div className="">
-          <button className="text-xl" onClick={openModal}>
-            <IoMove />
-          </button>
-
-          <MoveModal
-            index3={index2}
-            moveCardJSX={moveCardJSX}
-            isOpen={isModalOpen}
-            close={closeModal}
-          />
-        </div>
-
-        
-        <div>
-          <button
-            onClick={() => moveCardJSX(index2, index2 - 1)}
-            disabled={index2 === cardArray.length}
-          >
-            <IoArrowUpSharp className="text-xl" />
-          </button>
-        </div>
-
-        <div>
-          <button
-            onClick={() => moveCardJSX(index2, index2 + 1)}
-            disabled={index2 === cardArray.length}
-          >
-            <IoArrowDownSharp className="text-xl" />
-          </button>
-        </div>
+        <section className="flex basis-1/3"> 
+          <span className="basis-10/12"></span>
+          <div>
+            <button onClick={() => removeCardJSX(itemId)} className="text-xl">
+              <FaRegTrashCan />
+            </button>
+          </div>
+        </section>
       </section>
+
+
+
+
+
 
       {/* create a flex container */}
       <main className="flex items-center">
