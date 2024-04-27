@@ -9,7 +9,7 @@ import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import useCardArrayStore from "../../stores/useCardArrayStore";
 import { IoArrowUpSharp, IoArrowDownSharp, IoMove } from "react-icons/io5";
-
+import { BsTranslate } from "react-icons/bs";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MoveModal } from "../modal/MoveModal";
 
@@ -30,7 +30,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   const { frontText, backText } = cardArray[index2];
   const [localFrontText,setLocalFrontText]=useState("")
   const [localBackText,setLocalBackText]=useState("")
-  // const isFrontTextEmpty =localFrontText? localFrontText.trim() === "":false;
+ const isFrontTextEmpty =localFrontText? localFrontText.trim() === "":false;
   // const isBackTextEmpty =localBackText? localBackText.trim() === "":false;
   const [activeEditor, setActiveEditor] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,16 +100,13 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     setBackLangCode(newBackLangCode);
   };
   
-  
-// useEffect(()=>{
+   
 
-// },[ ])
-
-  //   it also populate the swap fronText and backText
-  useEffect(() => {
-    setLocalFrontText(frontText )
-    setLocalBackText(backText ) 
-  }, [ ]);
+  // //   it also populate the swap fronText and backText
+  // useEffect(() => {
+  //   setLocalFrontText(frontText )
+  //   setLocalBackText(backText ) 
+  // }, []);
 
   //need the localFrontText & target translated language type
   const handleTranslation = useCallback(async () => {
@@ -120,14 +117,14 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         frontLangCode.langCode,
         backLangCode.langCode
       );
-
+      
       if (!result.front) {
         setFrontLangCode({
           ...frontLangCode,
           langCode: result.detectedLanguageCode,
         });
       }
-      setLocalBackText(index2, result.translatedText); // This updates the localBackText state
+      setBackText( result.translatedText,index2); // This updates the localBackText state
     } catch (error) {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
@@ -191,6 +188,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         {/* localFrontText */}
         <section className="flex flex-col basis-6/12">
           <div onClick={isLengthBiggerThanOne} onBlur={blurSetFront}>
+            {/* it's reading the frontText from the array */}
             <MyEditor
               editorContent={frontText}
               onEditorFocus={handleEditorFocus}
@@ -235,16 +233,14 @@ export const EditCardDetails = ({ itemId, index2 }) => {
         <section>
           {/* send localBackText the langcode localBackText to this button  */}
           <button
-            onClick={() =>
-              handleTranslation(
+            onClick={() => handleTranslation(
                 localFrontText,
                 frontLangCode.langCode,
                 backLangCode.langCode
               )
             }
-            // className={`${isFrontTextEmpty ? "text-gray-500" : "text-black"} `}
-          >
-            translate
+             className={`${isFrontTextEmpty ? "text-gray-500" : "text-black"} text-2xl`} >
+           <BsTranslate/> 
           </button>
         </section>
       </main>

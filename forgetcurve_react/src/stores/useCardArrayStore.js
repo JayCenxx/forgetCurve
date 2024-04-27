@@ -33,7 +33,7 @@ setFrontText:(frontText,index)=>set(state => {
     const newCardArray = [...state.cardArray];
 
     // Check if the index is valid
-    if (newCardArray.length > index && index >= 0) {
+    if (index< newCardArray.length  && index >= 0) {
       // Make a copy of the card at the specified index
       const newCard = { ...newCardArray[index], frontText };
 
@@ -45,12 +45,16 @@ setFrontText:(frontText,index)=>set(state => {
     return { cardArray: newCardArray };
   }),
   setBackText:(backText,index)=>set(state => {
+    
     const newCardArray = [...state.cardArray];
-    if (newCardArray.length > index && index >= 0) {
+    console.log(newCardArray.length ,index, index>=0);
+    // need to make sure the index is >=0 and  index is < length
+    if (index< newCardArray.length  && index >= 0) {
       const newCard = { ...newCardArray[index], backText };
       newCardArray[index] = newCard;
+      console.log(backText,index,newCardArray);
     }
-
+ 
     // Return the new state
     return { cardArray: newCardArray };
   }),
