@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import EditMenuTitle from "./EditMenuTitle";
 import { EditCardDetails } from "./EditCardDetails"; 
 import useCardArrayStore from "../../stores/useCardArrayStore";
+import { EditButtonGroup } from "./EditButtonGroup";
 
 const EditMenuMain = () => {
  
 const cardArray =useCardArrayStore(i=>i.cardArray)
   // Initialize with one item with a unique ID
  
-
   const saveCardArray=()=>{
-
     // cardArrayServ();
   }
 
@@ -27,6 +26,9 @@ const cardArray =useCardArrayStore(i=>i.cardArray)
         <button className="btn bg-white shadow-lg text-lg">Save</button>
       </section>
       <EditMenuTitle />
+
+      <EditButtonGroup/>
+
       {cardArray.map((item, index) => (
         // use react.frag instead of <> cause of props
         <React.Fragment key={item.id}>

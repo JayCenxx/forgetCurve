@@ -3,8 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import translateServ from "../../services/translationServ";
 import LangDropdown from "../dropDownMenu/LangDropDown";
 import useLangCodeStore from "../../stores/useLangCodeStore";
-import { IoSwapHorizontal } from "react-icons/io5";
-import { findLanguageWithLangCode } from "../../utils/LangCodeArray";
 import { MyEditor } from "../richTextEditor/MyEditor";
 import { Toolbar } from "../richTextEditor/Toolbar";
 import useCardArrayStore from "../../stores/useCardArrayStore";
@@ -22,9 +20,9 @@ export const EditCardDetails = ({ itemId, index2 }) => {
     moveCardJSX,
     setFrontText,
     setBackText,
-    setCardArray
   } = useCardArrayStore();
-  const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode  } =
+
+  const { backLangCode, frontLangCode, setFrontLangCode } =
     useLangCodeStore();
   // only pull the localFrontText & localBackText
   const { frontText, backText } = cardArray[index2];
@@ -55,12 +53,14 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
   // this number have to stay at 100ms, otherwise it ll have swapping problem, or it ll get trigger way too many times per char type
   const handleFrontTextEditor = (content) => {
+    if(content)
     setLocalFrontText(content ); 
- 
 
   };
   const blurSetFront = () => {
     setFrontText(localFrontText, index2 );
+    
+    
   };
 
   const handleBackTextEditor = (content) => {
@@ -70,43 +70,23 @@ export const EditCardDetails = ({ itemId, index2 }) => {
 
   // if last card JSX, upon click add another one
   const isLengthBiggerThanOne = () => {
+
     // if either front or localBackText more than 1 character & it's the last CardDetail JSX then to add another JSX
     if (index2 === cardArray.length - 1) {
       addNewCardJSX();
     }
+    
   };
-
-  const handleSwap = () => {
-    // Temporary variables to hold the new values
-    const newFrontLangCode = backLangCode;
-    let newBackLangCode = frontLangCode; 
-    // Check if the language was auto-detected and update based on the localFrontText
-    if (frontLangCode.language === "Auto-Detect") {
-      // need to call backend to get a langCode
-      newBackLangCode = {
-        ...frontLangCode,
-        language: findLanguageWithLangCode(frontLangCode.langCode),
-      };
-    }
-
-    // update the array
-    const swapFrontnBack=cardArray.map(item=>({
-      frontText: item.backText,
-      backText: item.frontText
-    })) 
-    setCardArray(swapFrontnBack)
-    // Set the new values to state  
-    setFrontLangCode(newFrontLangCode);
-    setBackLangCode(newBackLangCode);
-  };
-  
+ 
+   useEffect(()=>{
+console.log(frontLangCode,backLangCode);
+   },[frontLangCode,backLangCode])
    
   //need the localFrontText & target translated language type
-  const handleTranslation = useCallback(async () => {
- 
+  const handleTranslation = useCallback(async () => { 
     try {
       const result = await translateServ(
-        localFrontText,
+        frontText,
         frontLangCode.langCode,
         backLangCode.langCode
       );
@@ -122,13 +102,13 @@ export const EditCardDetails = ({ itemId, index2 }) => {
       console.error("Error at handling translation:", error);
       alert("Translation failed. Please try again later.");
     }
-  }, [localFrontText, localBackText, frontLangCode, backLangCode ]);
+  }, [frontText, frontLangCode, backLangCode ]);
 
 
 
   return (
-    <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white my-8">
-      <section className="text-editor flex space-x-2  ">
+    <main className=" p-4 rounded-lg shadow-lg w-9/12 mx-auto bg-white mb-8">
+      <main className="text-editor flex space-x-2  ">
         <section className="flex basis-1/3 space-x-1">
           <div className="">
             <h1 className="text-xl -mt-1">
@@ -148,8 +128,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
               moveCardJSX={moveCardJSX}
               isOpen={isModalOpen}
               close={closeModal} />
-          </div>
-
+          </div> 
           
           <div>
             <button
@@ -175,29 +154,23 @@ export const EditCardDetails = ({ itemId, index2 }) => {
                 activeEditor={activeEditor}
                 setActiveEditor={setActiveEditor} />
             </div>
-          </section>
-
-
+          </section> 
 
         <section className="flex basis-1/3"> 
-          <span className="basis-10/12"></span>
+          <span className="basis-full"></span>
           <div>
-            <button onClick={() => removeCardJSX(itemId)} className="text-xl">
+            <button onClick={() => removeCardJSX(itemId)} className="text-xl"  disabled={  cardArray.length===1?true:false}>
               <FaRegTrashCan />
             </button>
           </div>
         </section>
-      </section>
-
-
-
-
+      </main>
 
 
       {/* create a flex container */}
-      <main className="flex items-center">
+      <main className="flex items-center lg:flex-nowrap flex-wrap  ">
         {/* localFrontText */}
-        <section className="flex flex-col basis-6/12">
+        <section className="flex flex-col lg:basis-6/12 basis-full">
           <div onClick={isLengthBiggerThanOne} onBlur={blurSetFront}>
             {/* it's reading the frontText from the array */}
             <MyEditor
@@ -212,21 +185,11 @@ export const EditCardDetails = ({ itemId, index2 }) => {
           </div>
         </section>
 
-        <section className="mr-6 ml-4 text-xl">
-          <button
-            onClick={handleSwap}
-            // className={`${
-            //   isFrontTextEmpty && isBackTextEmpty
-            //     ? "text-gray-500"
-            //     : "text-black"
-            // } `}
-            
-          >
-            <IoSwapHorizontal />
-          </button>
-        </section>
+     {/* <SwapButton handleSwap2={handleSwap}></SwapButton> */}
+        
+        <div className="basis-[2%]"></div>
         {/* localBackText */}
-        <section className="flex flex-col basis-6/12">
+        <section className="flex flex-col lg:basis-6/12 basis-full">
           <div onClick={isLengthBiggerThanOne}>
             <MyEditor
               editorContent={backText}
@@ -245,7 +208,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
           {/* send localBackText the langcode localBackText to this button  */}
           <button
             onClick={() => handleTranslation(
-                localFrontText,
+                frontText,
                 frontLangCode.langCode,
                 backLangCode.langCode
               )
