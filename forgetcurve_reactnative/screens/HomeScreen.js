@@ -1,7 +1,7 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Button } from 'react-native';
 import { Card, Icon } from "react-native-elements";
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
     return (
         <>
             <Card containerStyle={{ padding: 0, borderRadius: 10 }}>
@@ -43,6 +43,9 @@ function HomeScreen() {
                         </View>
                     </Card>
                 </View>
+            </View>
+            <View className="flex-1 justify-end p-4">
+                <Button color="blue" title="About Us" onPress={() => navigation.navigate('AboutUs')} />
             </View>
         </>
     );

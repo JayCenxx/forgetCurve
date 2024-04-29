@@ -1,6 +1,7 @@
 import { Icon } from 'react-native-elements';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
+import AboutUs from './AboutUs';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,13 @@ function MainHomePage() {
                             onPress={() => alert('Search set!')}
                         />
                     ),
+                }}
+            />
+            <Stack.Screen
+                name="AboutUs"
+                component={AboutUs}
+                options={{
+                    title: 'About Us',
                 }}
             />
         </Stack.Navigator>
