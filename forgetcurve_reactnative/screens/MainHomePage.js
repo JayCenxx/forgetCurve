@@ -1,10 +1,31 @@
-import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './HomeScreen';
+
+const Stack = createNativeStackNavigator();
 
 function MainHomePage() {
     return (
-        <View className="flex-1 items-center justify-center bg-white">
-            <Text>Main Home Page</Text>
-        </View>
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                    title: 'Unicard',
+                    headerTintColor: 'blue',
+                    headerRight: () => (
+                        <Icon
+                            name='search'
+                            type='feather'
+                            size={24}
+                            iconStyle={{ width: 24 }}
+                            color="blue"
+                            onPress={() => alert('Search set!')}
+                        />
+                    ),
+                }}
+            />
+        </Stack.Navigator>
     );
 }
 
