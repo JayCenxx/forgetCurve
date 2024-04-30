@@ -20,8 +20,8 @@ function App() {
         <Route path="/" element={<CardSetMain />} />
         <Route path="/CardSetStructure" element={<CardSetStructure />} />
       </Routes> */}
-
-<EditMenuMain></EditMenuMain> 
+<FlashCard></FlashCard>
+{/* <EditMenuMain></EditMenuMain>  */}
    </Router>
    </>
   );

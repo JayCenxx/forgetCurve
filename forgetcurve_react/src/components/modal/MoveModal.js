@@ -28,7 +28,8 @@ export const MoveModal = ({ index3, isOpen, close, moveCardJSX }) => {
   };
 
   const confirmMove = (e) => {
-    e.stopPropagation();
+    // this can ensure it doesnt move the scrollbar?
+    e.preventDefault(); 
     if (targetPosition) {
       moveCardJSX(index3, parseInt(targetPosition) - 1);
     }

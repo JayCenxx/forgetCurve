@@ -61,7 +61,7 @@ const [isFocused,setIsfocused]=useState(false);
  
   }
 
-  const editorClassName=`mr-2 border-gray-400 flex-grow ${isFocused ? "p-3" : "border-b-2"}`
+  const editorClassName=`mr-2 border-gray-400 flex-grow border-b-2`
 
   return editor ? (
     <div  className="flex flex-col basis-6/12  " >
