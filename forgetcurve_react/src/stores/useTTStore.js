@@ -7,7 +7,7 @@ import { getCardSet, updateCardSet } from "../utils/localStorageHelpers";
 const useTTStore = create((set, get) => ({
   audio: null,
   lastText: "",
-  autoSpeak: true,
+  autoSpeak: false,
   base64ToAudio:async(base64)=>{
 
     try{
@@ -50,7 +50,8 @@ const useTTStore = create((set, get) => ({
 
         //else cacheKey dont exist, API call to get the TTS string. cSpeakText is on auto language detection
         const response = await fetchTTS(text)
-        const {baseString}=response; 
+ 
+        const {baseString}=response;  
         if (response && baseString) { 
           // Set new cacheKey and value
           cardSet.set(cacheKey, baseString);

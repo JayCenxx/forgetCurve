@@ -14,7 +14,7 @@ const TTSButtons = ({ text }) => {
   };
 
   return (
-    <button onClick={handleButtonClick}>
+    <button onClick={handleButtonClick} className="text-2xl">
       <RxSpeakerLoud />
     </button>
   );

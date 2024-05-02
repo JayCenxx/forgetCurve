@@ -60,41 +60,59 @@ const flipPage=( )=>{
       }else{
         cheapSynthesizeText(backText) 
       }
-  },[isFlipped,location.pathname,curPage])
+  },[isFlipped,location.pathname,curPage,frontText,backText,autoSpeak,cheapSynthesizeText])
 
-  useEffect(() => {},[cardJson])
+  useEffect(() => {},[card])
 
   return (
     <>
     <main className="w-50 h-96 justify-center flex  my-7">
-      <main className={`w-11/12 lg:w-9/12 xl:w-1/2   h-full transition-transform duration-${flipDuration} transform preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`} onClick={flipPage}>
-        <section className=" absolute w-full h-full backface-hidden bg-white rounded-xl flex justify-center items-center">
-     
-          <div className="text-3xl flex justify-center items-center h-full">
-           {frontText}
+      <article className={` w-11/12 lg:w-9/12 xl:w-1/2   h-full transition-transform duration-${flipDuration} transform preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`} onClick={flipPage}>
+        {/* front-card, outer container */}
+        <section className=" absolute   w-full h-full  backface-hidden bg-white rounded-xl flex overflow-auto flex-col">
+          <span className='grow min-h-5'>  </span>
+          <div className=" text-3xl flex justify-center items-center px-4 ">
+              {frontText}
           </div>
-          
-         {/* Stop event propagation to prevent the card from flipping when the TTS play button is clicked */}
-          <div className="text-xl absolute bottom-0 right-0 p-4" onClick={e => e.stopPropagation()}>
-         <TTSButtons text={frontText}/>
+          <span className=' grow min-h-3 '>  </span>      
+
+          <div className='flex'>
+            <span className='basis-[98%]'></span>
+             {/* Stop event propagation to prevent the card from flipping when the TTS play button is clicked */}
+            <div className="text-xl  pr-4 pb-1 " onClick={e => e.stopPropagation()}>
+                <TTSButtons text={frontText}/>
+            </div>  
           </div>
         </section>
 
-      <section className={`absolute w-full h-full backface-hidden bg-white transform rotate-y-180 ${isFlipped ? 'rotate-y-180' : ''} rounded-xl`}  onClick={flipPage}>
-          <div className="text-3xl flex justify-center items-center h-full">
-           {backText}
+      {/* back-card, outer container */}
+        <section className={`absolute w-full h-full backface-hidden bg-white transform rotate-y-180 ${isFlipped ? 'rotate-y-180' : ''} rounded-xl  flex overflow-auto flex-col`}  onClick={flipPage}>
+            <span className='grow min-h-5'>  </span>
+            <div className="text-3xl flex justify-center items-center px-4">
+                {backText}
+            </div>
+            <span className=' grow min-h-3 '>  </span>      
+
+            <div className='flex'>
+              <span className='basis-[98%]'></span>
+              {/* Stop event propagation to prevent the card from flipping when the TTS play button is clicked */}
+              <div className="text-xl  pr-4 pb-1 " onClick={e => e.stopPropagation()}>
+                  <TTSButtons text={backText}/>
+            </div>  
           </div>
 
-          <div className="text-xl absolute bottom-0 right-0 p-4" onClick={e => e.stopPropagation()}>
-           <TTSButtons text={backText}/>
-          </div>
+
         </section>
-      </main>
+        
+      </article>
+      
     </main>
     
     <ArrowButtons onLeftClick={handlePrev} onRightClick={handleNext}>
         {curPage + 1}/{maxPage + 1}
       </ArrowButtons>
+
+
     </>
   );
 }
