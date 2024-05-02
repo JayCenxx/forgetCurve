@@ -18,7 +18,7 @@ function FlashCard() {
   const [frontText, setFrontText] = useState(card[curPage].frontText);
   const [backText, setBackText] = useState(card[curPage].backText);
   const[flipDuration,setFlipDuration]=useState(1000)
-  const {autoSpeak,synthesizeText}=useTTStore()
+  const {autoSpeak,cheapSynthesizeText}=useTTStore()
 
   const handleNext = () => { 
     const nextPage = curPage + 1;
@@ -54,12 +54,11 @@ const flipPage=( )=>{
   useEffect(() => {
     if(autoSpeak===false){
     return;}
-    
       // isflip true is front  send frontText over, false is back 
       if(isFlipped===false){
-        synthesizeText(frontText)
+        cheapSynthesizeText(frontText)
       }else{
-        synthesizeText(backText)
+        cheapSynthesizeText(backText) 
       }
   },[isFlipped,location.pathname,curPage])
 
@@ -71,21 +70,23 @@ const flipPage=( )=>{
       <main className={`w-11/12 lg:w-9/12 xl:w-1/2   h-full transition-transform duration-${flipDuration} transform preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`} onClick={flipPage}>
         <section className=" absolute w-full h-full backface-hidden bg-white rounded-xl flex justify-center items-center">
      
+          <div className="text-3xl flex justify-center items-center h-full">
+           {frontText}
+          </div>
+          
          {/* Stop event propagation to prevent the card from flipping when the TTS play button is clicked */}
           <div className="text-xl absolute bottom-0 right-0 p-4" onClick={e => e.stopPropagation()}>
          <TTSButtons text={frontText}/>
           </div>
-          <div className="text-3xl flex justify-center items-center h-full">
-           {frontText}
-          </div>
         </section>
 
       <section className={`absolute w-full h-full backface-hidden bg-white transform rotate-y-180 ${isFlipped ? 'rotate-y-180' : ''} rounded-xl`}  onClick={flipPage}>
-          <div className="text-xl absolute bottom-0 right-0 p-4" onClick={e => e.stopPropagation()}>
-           <TTSButtons text={backText}/>
-          </div>
           <div className="text-3xl flex justify-center items-center h-full">
            {backText}
+          </div>
+
+          <div className="text-xl absolute bottom-0 right-0 p-4" onClick={e => e.stopPropagation()}>
+           <TTSButtons text={backText}/>
           </div>
         </section>
       </main>

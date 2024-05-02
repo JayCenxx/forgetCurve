@@ -1,4 +1,4 @@
-import  {sampleJson}  from "../../utils/sampleJson";
+import  {sampleJson}  from "../../assets/sampleJson";
 import ArrowButtons from "../buttons/ArrowButton";
 import { useNavigate } from 'react-router-dom';
 import CardSetDetails from "./CardSetDetails";

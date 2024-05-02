@@ -5,7 +5,7 @@ import { FaRegHandPointer } from "react-icons/fa";
 import { MdDeleteOutline,MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { BiDownArrow } from "react-icons/bi";
 import ThreedotsButton from "../buttons/ThreedotsButton";
-import  {sampleJson}  from "../../utils/sampleJson";
+import  {sampleJson}  from "../../assets/sampleJson";
 const CardSetStructure = () => {
   return (
     <>

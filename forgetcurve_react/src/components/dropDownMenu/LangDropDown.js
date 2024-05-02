@@ -1,6 +1,6 @@
 // LangDropDown.js
 import { useEffect, useRef, useState } from "react";
-import { langCodeArray } from "../../utils/LangCodeArray";
+import { langCodeArray } from "../../assets/LangCodeArray";
 import useLangCodeStore from "../../stores/useLangCodeStore";
 import DropDownList from "./DropDownList";
 

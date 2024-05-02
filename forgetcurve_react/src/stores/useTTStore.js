@@ -1,19 +1,35 @@
 // useStores.js
 import create from "zustand";
 import axios from "axios";
+import { fetchTTS } from "../services/fetchTTS";
+import { getCardSet, updateCardSet } from "../utils/localStorageHelpers";
 
 const useTTStore = create((set, get) => ({
   audio: null,
   lastText: "",
-  autoSpeak: false,
+  autoSpeak: true,
   base64ToAudio:async(base64)=>{
-    const audioContent = `data:audio/mp3;base64,${base64}`;
-    // use the base64 string to convert to mp3 to create an audio
-    const newAudio = new Audio(audioContent);
-    // play the mp3
-    await newAudio.play();
-    // setting the value to audio & lastText
-    set({ audio: newAudio  });
+
+    try{
+      const audioContent = `data:audio/mp3;base64,${base64}`;
+      const currentAudio = get().audio;
+
+      // this is used to check if previous audio object exist, if yes stop playing it, so the new audio can interrupt it
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+
+      // use the base64 string to convert to mp3 to create an audio
+      const newAudio = new Audio(audioContent);
+      // play the mp3
+      await newAudio.play();
+      // setting the value to audio & lastText
+      set({ audio: newAudio  });
+    }catch(err){
+      console.error("didnt interact with document",err) 
+    }
+  
   },
   cheapSynthesizeText: async (text) => {
     try {
@@ -23,11 +39,8 @@ const useTTStore = create((set, get) => ({
         let cacheKey = `${text}`;
         let dateId = '1'; // we assume that we use dateTime coming back from database
        
-        //check if this cardSet exist, 
-        let cardSet = localStorage.getItem(dateId);
-        //  if dataTimeID exist, we want to get the inner HashMap to cardSet from Outer Hashmap, else set it as an empty map , also gotta convert to JS string
-        cardSet = cardSet ? new Map(JSON.parse(cardSet)) : new Map();
-    
+       let cardSet= getCardSet(dateId)
+     localStorage.clear()
         // Check if the cacheKey already exists & get the base64 string, purpose is avoid API call
         if (cardSet.has(cacheKey)) {
            const base64=cardSet.get(cacheKey); 
@@ -36,21 +49,21 @@ const useTTStore = create((set, get) => ({
         }
 
         //else cacheKey dont exist, API call to get the TTS string. cSpeakText is on auto language detection
-        const response = await axios.post("http://localhost:4000/google/cSpeakText", { text });
-       
-        if (response && response.data.baseString) { 
+        const response = await fetchTTS(text)
+        const {baseString}=response; 
+        if (response && baseString) { 
           // Set new cacheKey and value
-          cardSet.set(cacheKey, response.data.baseString);
+          cardSet.set(cacheKey, baseString);
     
-          // Update localStorage/outer-HashMap with the new set  ,  also gotta convert to JSON when u set
-          localStorage.setItem(dateId, JSON.stringify([...cardSet]));
+          updateCardSet(dateId,cardSet)
         }
- 
-        base64ToAudio(response.data.baseString);
+        //let it play for the first time
+        base64ToAudio(baseString);
 
       }
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error("cheapSynthesizeText Error", err);
+      throw err;
     }
   },
   synthesizeText: async (text) => {
