@@ -6,7 +6,7 @@ const translateServ = async (frontTexts, frontLangCodes, backLangCodes) => {
  // Generate a cache key based on the text and target language
  const cacheKey = `${frontTexts}-${frontLangCodes}-${backLangCodes}`;
 
- // Check the cache first
+ // Check the cache first in the object (its is used like a hashmap here, check if key exists)
  if (cache[cacheKey]) {
    return cache[cacheKey];
  }
@@ -18,7 +18,7 @@ const translateServ = async (frontTexts, frontLangCodes, backLangCodes) => {
      backLangCode: backLangCodes,
    });
 
-   // Cache the result using the generated key
+   // Cache the result using the cacheKey
    cache[cacheKey] = result.data;
 
 // result{data{frontText,targetLang} }

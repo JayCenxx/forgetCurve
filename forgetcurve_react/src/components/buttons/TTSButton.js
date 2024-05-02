@@ -3,11 +3,11 @@ import { RxSpeakerLoud } from "react-icons/rx";
 import useTTStore from "../../stores/useTTStore";
 
 const TTSButtons = ({ text }) => {
-  const { synthesizeText } = useTTStore();
+  const { synthesizeText, cheapSynthesizeText } = useTTStore();
 
   const handleButtonClick = async () => {
     try {
-      await synthesizeText(text);
+      await cheapSynthesizeText(text);
     } catch (e) {
       console.error("Error playing the audio", e);
     }

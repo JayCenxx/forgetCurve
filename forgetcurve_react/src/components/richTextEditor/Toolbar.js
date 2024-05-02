@@ -1,6 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { buttonStyle } from "../../style/styles";
-
+import { FaBold } from "react-icons/fa6";
+import { MdOutlineFormatListBulleted } from "react-icons/md";
 // Toolbar.js
 export const Toolbar = ({ activeEditor, setActiveEditor }) => {
     if (!activeEditor) return null;
@@ -18,17 +19,17 @@ export const Toolbar = ({ activeEditor, setActiveEditor }) => {
         <button
           onClick={handleButtonClick}
           disabled={!activeEditor.can().chain().focus().toggleBold().run()}
-          className={` ${activeEditor.isActive("bold") ? 'is-active' : ''} ${buttonStyle.round_container} ${buttonStyle.round_span} h-10 w-10`}
+          className={` ${activeEditor.isActive("bold") ? 'is-active' : ''}  `}
         >
-          bold
+         <FaBold />
         </button>
     
         <button
           onClick={handleBulletListClick}
           disabled={!activeEditor.can().chain().focus().toggleBulletList().run()}
-          className={`${activeEditor.isActive("bulletList") ? 'is-active' : ''} ${buttonStyle.round_container} ${buttonStyle.round_span} h-10 w-10`}
+          className={`${activeEditor.isActive("bulletList") ? 'is-active' : ''} text-xl `}
         >
-        Bullet
+       <MdOutlineFormatListBulleted/>
         </button>
       </main>
     );

@@ -8,11 +8,7 @@ const flashCardSchema = new mongoose.Schema({
   back: {
     type: String,
     required: [true, "back is required"],
-  },
-  hunt: {
-    type: String,
-    required: false,
-  }
+  }, 
 });
 
 module.exports = mongoose.model("flashCard", flashCardSchema);

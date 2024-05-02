@@ -21,16 +21,12 @@ const { backLangCode, frontLangCode, setFrontLangCode, setBackLangCode } = useLa
   };
 
   //i want this to happen when the page refresh, so the Front ll show Auto Detect instead of Select Language
-  useEffect(() => {
-    if (isAutoDetectFront) {
-      setFrontLangCode({ language: "Auto-Detect", langCode: "auto" });
-      setBackLangCode({language: "English",langCode: "en" });
-    }
-  }, []);
+ 
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (refs.current && !refs.current.contains(e.target)) {
+      // refs.current is pointing at <button>, it's not the parent of the language, so if u click anywhere else, it ll close the model. 
+      if (!refs.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
@@ -62,10 +58,11 @@ const selected= isAutoDetectFront?frontLangCode.language : backLangCode.language
           className="fixed inset-0 z-10 "
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          {/* Centered container for the dropdown */}
+          {/* Centered container for the dropdown, can add xl:h-auto but not ideal */}
           <div
-            className=" fixed inset-0 m-auto w-[60vw] max-h-[55%] h-[55%] p-6 overflow-auto rounded-md bg-white shadow-lg grid place-items-center"
+            className=" fixed inset-0 m-auto w-[60vw] max-h-[60%] h-[60%]   p-6 overflow-auto rounded-md bg-white shadow-lg "
             style={{
+              maxHeight: 'fit-content',
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",

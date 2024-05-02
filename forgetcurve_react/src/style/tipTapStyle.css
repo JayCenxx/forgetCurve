@@ -2,18 +2,28 @@
     > * + * {
       margin-top: 0.75em;
      
-    }
-  
+    } 
+
     ul,li
     ol {
-      list-style-type: disc; /* Ensure bullets show */
-      padding-left: 25px;
-      
+      /* make bulletpoint showup */
+      list-style-type: disc; 
+      padding-left: 25px; 
     }
 
-    /* affect the words inside each editor allow p to move to the right */
+    /* affect the words inside each editor allow p to move to the right, child of ProseMirror */
     p{
-      @apply  pl-2
+      @apply text-lg
     }
   }
+ /* affect the inner border of the text editor, parent of p */
+  .ProseMirror { 
+    @apply   pl-3 pt-4 
+  }
 
+  .ProseMirror:focus {
+    outline: none ; /* Removes the default focus outline */
+     border:solid rgb(110 231 183) ;
+   border-radius:16px;
+   @apply p-3
+  }

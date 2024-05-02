@@ -2,14 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const synthesizeSpeech = require('../services/speechService');
-const translate = require('google-translate-api-x');
-const projectId=process.env.PROJECT_ID;
-const location=process.env.location;
+const {translate, speak} = require('google-translate-api-x'); 
 const {TranslationServiceClient} = require('@google-cloud/translate');
+const  langCodeService  = require('../services/langCodeService');
 const client = new TranslationServiceClient();
 
 
-// text to speech 
+//expensive text to speech 
 router.post('/speakText', async (req, res) => {
   const { input, voice, audioConfig } = req.body;
 
@@ -31,6 +30,21 @@ router.post('/speakText', async (req, res) => {
 }
 );
 
+//cheap TTS
+router.post('/cSpeakText', async(req,res)=>{
+try {
+  const {text}=req.body; 
+  const detectLangCode=await langCodeService(text);
+   const ttsBase64=await speak(text, {to:detectLangCode}) 
+  res.json({
+    "baseString":ttsBase64
+  });
+}
+catch(e){
+  console.error(e)
+} 
+})
+
 //free translation service
 router.post('/ctranslate', async (req, res) => {
     const { frontText, frontLangCode, backLangCode } = req.body;
@@ -38,9 +52,7 @@ router.post('/ctranslate', async (req, res) => {
     if (!frontText || !backLangCode) {
       return res.status(400).json({ error: 'Both text and target-language are required' });
     }
-  
     try {
-    
   //  user selected auto lang detection for Front
       if(frontLangCode ==="auto"){
         const result = await translate(frontText, {to:backLangCode, autoCorrect: true});
@@ -49,7 +61,6 @@ router.post('/ctranslate', async (req, res) => {
           // this is the auto detection code 
           langCode: result.from.language.iso
         });
-      
       }else{
         // otherwise the user selected a frontLangCode
         const result = await translate(frontText, {from:frontLangCode,to:backLangCode, autoCorrect: true});
@@ -58,7 +69,6 @@ router.post('/ctranslate', async (req, res) => {
           langCode: frontLangCode
         });
       }
-     
     } catch (error) {
       console.error('Error translating:', error);
       res.status(500).json({ error: 'Error processing your translation request' });
