@@ -32,12 +32,17 @@ router.post('/speakText', async (req, res) => {
 
 //cheap TTS
 router.post('/cSpeakText', async(req,res)=>{
-  const {input}=req.body;
-  const detectLangCode=await langCodeService(input);
-   const ttsBase64=await speak(input, {to:detectLangCode}) 
+try {
+  const {text}=req.body; 
+  const detectLangCode=await langCodeService(text);
+   const ttsBase64=await speak(text, {to:detectLangCode}) 
   res.json({
     "baseString":ttsBase64
   });
+}
+catch(e){
+  console.error(e)
+} 
 })
 
 //free translation service

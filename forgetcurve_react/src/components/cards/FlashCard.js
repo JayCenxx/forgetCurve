@@ -63,7 +63,7 @@ const flipPage=( )=>{
       }
   },[isFlipped,location.pathname,curPage])
 
-
+  useEffect(() => {},[cardJson])
 
   return (
     <>

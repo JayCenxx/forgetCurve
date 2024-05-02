@@ -23,9 +23,9 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   } = useCardArrayStore();
 
   const { backLangCode, frontLangCode, setFrontLangCode } =
-    useLangCodeStore();
-  // only pull the localFrontText & localBackText
-  const { frontText, backText } = cardArray[index2];
+    useLangCodeStore(); 
+    const { frontText, backText } = cardArray[index2];
+    // only pull the localFrontText & localBackText
   const [localFrontText,setLocalFrontText]=useState("")
   const [localBackText,setLocalBackText]=useState("")
  const isFrontTextEmpty =localFrontText? localFrontText.trim() === "":false;
