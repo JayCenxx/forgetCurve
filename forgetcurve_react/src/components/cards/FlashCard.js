@@ -5,6 +5,7 @@ import ArrowButtons from '../buttons/ArrowButton';
 import useTTStore from '../../stores/useTTStore';
 import { useLocation } from 'react-router-dom';
 import  {cardJson}  from '../../assets/cardJson';
+import Bubble from '../buttons/Bubble';
 
 
 
@@ -62,7 +63,9 @@ const flipPage=( )=>{
       }
   },[isFlipped,location.pathname,curPage,frontText,backText,autoSpeak,cheapSynthesizeText])
 
-  useEffect(() => {},[card])
+  useEffect(() => {},[card,frontText,backText])
+
+  console.log(frontText);
 
   return (
     <>
@@ -71,10 +74,11 @@ const flipPage=( )=>{
         {/* front-card, outer container */}
         <section className=" absolute   w-full h-full  backface-hidden bg-white rounded-xl flex overflow-auto flex-col">
           <span className='grow min-h-5'>  </span>
-          <div className=" text-3xl flex justify-center items-center px-4 ">
-              {frontText}
+          <div className=" text-3xl flex justify-center items-center px-4 " onClick={e=>e.stopPropagation()}>
+              {/* {frontText} */}
+              <Bubble text={`<p class="text-3xl">${frontText}</p>`} />
           </div>
-          <span className=' grow min-h-3 '>  </span>      
+          <span className=' grow min-h-3 '>  </span>     
 
           <div className='flex'>
             <span className='basis-[98%]'></span>
@@ -88,8 +92,8 @@ const flipPage=( )=>{
       {/* back-card, outer container */}
         <section className={`absolute w-full h-full backface-hidden bg-white transform rotate-y-180 ${isFlipped ? 'rotate-y-180' : ''} rounded-xl  flex overflow-auto flex-col`}  onClick={flipPage}>
             <span className='grow min-h-5'>  </span>
-            <div className="text-3xl flex justify-center items-center px-4">
-                {backText}
+            <div className="text-3xl flex justify-center items-center p-4" onClick={e=>e.stopPropagation()}>
+                <Bubble text={`<p class="text-3xl">${backText}</p>`} />
             </div>
             <span className=' grow min-h-3 '>  </span>      
 
@@ -105,14 +109,13 @@ const flipPage=( )=>{
         </section>
         
       </article>
-      
+     
     </main>
-    
+   
     <ArrowButtons onLeftClick={handlePrev} onRightClick={handleNext}>
         {curPage + 1}/{maxPage + 1}
       </ArrowButtons>
-
-
+ 
     </>
   );
 }

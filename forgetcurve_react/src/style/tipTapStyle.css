@@ -12,13 +12,15 @@
     }
 
     /* affect the words inside each editor allow p to move to the right, child of ProseMirror */
+ 
     p{
+   
       @apply text-lg
     }
   }
  /* affect the inner border of the text editor, parent of p */
-  .ProseMirror { 
-    @apply   pl-3 pt-4 
+  .ProseMirror {  
+    @apply   pl-3 pt-4   
   }
 
   .ProseMirror:focus {
@@ -27,3 +29,8 @@
    border-radius:16px;
    @apply p-3
   }
+
+  input[type="checkbox"] {
+    margin-right: 8px;
+  }
+ 
