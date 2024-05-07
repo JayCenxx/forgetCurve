@@ -2,12 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import '../../style/flashcard.css';
-import TTSButtons from '../buttons/TTSButton';
-import ArrowButtons from '../buttons/ArrowButton'; 
+import TTSButtons from '../buttons/TTSButton'; 
 import useTTStore from '../../stores/useTTStore';
-import { useLocation } from 'react-router-dom';
-import  {cardJson}  from '../../assets/cardJson';
-import Bubble from '../buttons/Bubble';
+import { useLocation } from 'react-router-dom'; 
+import Bubble from '../richTextEditor/Bubble';
 import useFlashCardStore from '../../stores/useFlashCardStore';
 
 
@@ -20,14 +18,20 @@ function FlashCard() {
 
  
   useEffect(() => {
-    if(autoSpeak===false){
-    return;}
-      // isflip true is front  send frontText over, false is back 
-      if(isFlipped===false){
-        cheapSynthesizeText(frontText)
-      }else{
-        cheapSynthesizeText(backText) 
-      }
+    try{
+
+      if(autoSpeak===false){
+        return;}
+          // isflip true is front  send frontText over, false is back 
+          if(isFlipped===false){
+            cheapSynthesizeText(frontText)
+          }else{
+             cheapSynthesizeText(backText) 
+          }
+    }
+    catch(err){
+      console.error('failed to auto speak',err);
+    }
   },[isFlipped,location.pathname,curPage,frontText,backText,autoSpeak,cheapSynthesizeText])
 
   useEffect(() => {},[card,frontText,backText])
@@ -35,7 +39,7 @@ function FlashCard() {
 
   return (
     <>
-    <main className="w-50 h-96 justify-center flex  my-7">
+    <main className="w-50 h-96 justify-center flex  my-5">
       <article className={` w-11/12 lg:w-9/12 xl:w-1/2   h-full transition-transform duration-${flipDuration} transform preserve-3d cursor-pointer ${isFlipped ? 'rotate-y-180' : ''}`} onClick={flipPage}>
         {/* front-card, outer container */}
         <section className=" absolute   w-full h-full  backface-hidden bg-white rounded-xl flex overflow-auto flex-col" >

@@ -8,6 +8,7 @@ const useTTStore = create((set, get) => ({
   audio: null,
   lastText: "",
   autoSpeak: false,
+  flipAutoSpeak: ()=>set((oldState)=>{return {autoSpeak: !oldState.autoSpeak}}),
   base64ToAudio:async(base64)=>{
 
     try{
@@ -39,8 +40,7 @@ const useTTStore = create((set, get) => ({
         let cacheKey = `${text}`;
         let dateId = '1'; // we assume that we use dateTime coming back from database
        
-       let cardSet= getCardSet(dateId)
-     localStorage.clear()
+       let cardSet= getCardSet(dateId) 
         // Check if the cacheKey already exists & get the base64 string, purpose is avoid API call
         if (cardSet.has(cacheKey)) {
            const base64=cardSet.get(cacheKey); 

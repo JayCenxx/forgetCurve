@@ -12,7 +12,7 @@ const { card,curPage, nextPage, prevPage } = useFlashCardStore();
         <FaChevronLeft className={`${buttonStyle.round_span} text-2xl text-gray-700`} />
       </button>
       <div className="text-lg">
-      {curPage + 1}/{card.length + 1}
+      {curPage + 1}/{card.length}
       </div>
       <button onClick={nextPage} className={`${buttonStyle.round_container} bg-white`}>
         <FaChevronRight className={`${buttonStyle.round_span} text-2xl text-gray-700`} />

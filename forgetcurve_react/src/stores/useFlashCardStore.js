@@ -21,6 +21,16 @@ const useFlashCardStore=create((set, get) => ({
     flipPage: () => set((state) => { 
       return{ isFlipped: !state.isFlipped }}),
   
+    nextPage: () => {
+        const nextPage = get().curPage + 1;
+        get().updatePage(nextPage);
+      },
+    
+    prevPage: () => {
+        const prevPage = get().curPage - 1;
+        get().updatePage(prevPage);
+      },
+
       // make it so if curPage state changes, then we set duration-1000 down to 0
     updatePage: (newPage) => {
       const { card } = get();
@@ -38,15 +48,7 @@ const useFlashCardStore=create((set, get) => ({
       }
     },
   
-    nextPage: () => {
-      const nextPage = get().curPage + 1;
-      get().updatePage(nextPage);
-    },
   
-    prevPage: () => {
-      const prevPage = get().curPage - 1;
-      get().updatePage(prevPage);
-    },
   }));
 
 export default useFlashCardStore;
