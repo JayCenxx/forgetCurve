@@ -37,8 +37,7 @@ router.post('/cSpeakText', async(req,res)=>{
     const {text}=req.body;  
     //check the langCode
     const detectLangCode=await langCodeService(text.slice(0, 199));
-    const base64Array= await cSpeechService(text,200,detectLangCode)  
-    console.log();
+    const base64Array= await cSpeechService(text,200,detectLangCode)   
     res.json({
       "baseString":base64Array
     });

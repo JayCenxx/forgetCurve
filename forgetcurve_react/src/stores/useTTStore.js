@@ -9,17 +9,24 @@ const useTTStore = create((set, get) => ({
   lastText: "",
   autoSpeak: false, 
   flipAutoSpeak: ()=>set((oldState)=>{return {autoSpeak: !oldState.autoSpeak}}),
+  stopCurrentAudio:()=>{
+    try{
+
+      const currentAudio = get().audio; 
+      // this is used to check if previous audio object exist, if yes stop playing it, so the new audio can interrupt it
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+    }catch(err){
+      console.error("error at stopCurrentAudio",err);
+    }
+  },
   base64ToAudio:async(base64,isSinglePlay)=>{
 
     try{
       const audioContent = `data:audio/mp3;base64,${base64}`;
-      const currentAudio = get().audio; 
-      // this is used to check if previous audio object exist, if yes stop playing it, so the new audio can interrupt it
-      if (currentAudio) { 
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-       
-      }
+      get().stopCurrentAudio()
 
       // use the base64 string to convert to mp3 to create an audio
       const newAudio = new Audio(audioContent);
@@ -28,64 +35,74 @@ const useTTStore = create((set, get) => ({
       if(isSinglePlay){
          // play the mp3
         await newAudio.play();
+        set({ audio: newAudio   });
       }
-      else{
-        //this is for >200 characters  <=1000
-        await new Promise((resolve, reject) => {
+      else{ 
+        //this is for >200 characters  
+        await new Promise((resolve, reject) => { 
           newAudio.onended = resolve;
           newAudio.onerror = reject;
           newAudio.play();
+          //duplicated code i know, but this is the code that solve the problem with multiple tts playin at the sametime
+          set({ audio: newAudio   });
         });
       } 
-     
-      // setting the value to audio & lastText
-      set({ audio: newAudio  });
     }catch(err){
-      console.error("didnt interact with document",err) 
+      console.error("problem at base64ToAudio",err) 
     }
   
   },
-  base64ArrayToAudio: async (base64Array) => { 
- 
-    if(typeof base64Array==="string"){
-      get().base64ToAudio(base64Array,true);
-      return 
-    }
-
-    for (const base64 of base64Array) {
-      await get().base64ToAudio(base64);
-    }
+  base64ArrayToAudio: async (base64Array) => {  
+      //for <=200 chars
+      if(typeof base64Array==="string"){
+        get().base64ToAudio(base64Array,true); 
+      }
+      //for >200 chars
+      else{
+        for (const base64 of base64Array) {
+          await get().base64ToAudio(base64);
+        } 
+      } 
+  },
+  toAduioAndSetLastText:(base64,text)=>{
+    get().base64ArrayToAudio(base64); 
+    set({lastText:text})
   },
   cheapSynthesizeText: async (text) => {
     try {
+      const {toAduioAndSetLastText,stopCurrentAudio}=get()
+      //if the text is empty, no need to speak it
       if (text && text.trim() !== "") {
-
-        const {base64ArrayToAudio}=get()
+  
+           //if same text & audio is playing, 2nd time u click the speak button, it ll stop it, 3rd time it ll play from beginning
+           if(text===get().lastText){ 
+            stopCurrentAudio()
+            //set lastText back to "" so u can play a 2nd time
+            set({lastText:""})
+            return
+          } 
+          //else diff Text just replace the existing one 
+  
         let cacheKey = `${text}`;
         let dateId = '1'; // we assume that we use dateTime coming back from database
       
        let cardSet= getCardSet(dateId)  
-       cardSet.clear();
         // Check if the cacheKey already exists & get the base64 string, purpose is avoid API call
-        if (cardSet.has(cacheKey)) {
+        if (cardSet.has(cacheKey)) { 
            const base64=cardSet.get(cacheKey); 
-           base64ArrayToAudio(base64);
+           toAduioAndSetLastText(base64,text) 
           return  ;
-        }
-
+        } 
         //else cacheKey dont exist, API call to get the TTS string. cSpeakText is on auto language detection
-        const response = await fetchTTS(text)
- 
+        const response = await fetchTTS(text) 
         const {baseString}=response;  
         if (response && baseString) { 
           // Set new cacheKey and value
-          cardSet.set(cacheKey, baseString);
-    
+          cardSet.set(cacheKey, baseString); 
           updateCardSet(dateId,cardSet)
         }
         //let it play for the first time
-        base64ArrayToAudio(baseString);
-
+        toAduioAndSetLastText(baseString,text)  
       }
     } catch (err) {
       console.error("cheapSynthesizeText Error", err);

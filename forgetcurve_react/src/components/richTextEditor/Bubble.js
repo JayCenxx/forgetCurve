@@ -100,7 +100,7 @@ const leftPosition = `calc(${menuPosition.x}px - ${calculateLeftPosition()})`;
           style={{ 
             // set the bubble menu directly on top of the highlighted text
             left: leftPosition,
-            top: `${menuPosition.y - 160}px`,
+            top: `${menuPosition.y - 200}px`,
           }} >
           <button onClick={()=>cheapSynthesizeText(window.getSelection().toString())} className='text-lg btn btn-sm'>Speak</button>
         </div>
