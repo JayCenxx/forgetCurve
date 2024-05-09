@@ -1,0 +1,20 @@
+.tiptap {
+    > * + * {
+      margin-top: 0.75em;
+     
+    } 
+
+    ul,li
+    ol {
+      /* make bulletpoint showup */
+      list-style-type: disc; 
+      padding-left: 25px; 
+    }
+
+    /* affect the words inside each editor allow p to move to the right, child of ProseMirror */
+ 
+    p{
+   
+      @apply text-3xl
+    }
+  }

@@ -3,7 +3,7 @@ import { RxSpeakerLoud } from "react-icons/rx";
 import useTTStore from "../../stores/useTTStore";
 
 const TTSButtons = ({ text }) => {
-  const { synthesizeText, cheapSynthesizeText } = useTTStore();
+  const { cheapSynthesizeText } = useTTStore();
 
   const handleButtonClick = async () => {
     try {
@@ -14,7 +14,7 @@ const TTSButtons = ({ text }) => {
   };
 
   return (
-    <button onClick={handleButtonClick}>
+    <button onClick={handleButtonClick} className="text-2xl">
       <RxSpeakerLoud />
     </button>
   );

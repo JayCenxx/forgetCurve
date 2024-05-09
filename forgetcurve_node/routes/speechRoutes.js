@@ -4,7 +4,8 @@ const router = express.Router();
 const synthesizeSpeech = require('../services/speechService');
 const {translate, speak} = require('google-translate-api-x'); 
 const {TranslationServiceClient} = require('@google-cloud/translate');
-const  langCodeService  = require('../services/langCodeService');
+const  langCodeService  = require('../services/langCodeService'); 
+const cSpeechService = require('../services/cSpeechService');
 const client = new TranslationServiceClient();
 
 
@@ -32,17 +33,18 @@ router.post('/speakText', async (req, res) => {
 
 //cheap TTS
 router.post('/cSpeakText', async(req,res)=>{
-try {
-  const {text}=req.body; 
-  const detectLangCode=await langCodeService(text);
-   const ttsBase64=await speak(text, {to:detectLangCode}) 
-  res.json({
-    "baseString":ttsBase64
-  });
-}
-catch(e){
-  console.error(e)
-} 
+  try {
+    const {text}=req.body;  
+    //check the langCode
+    const detectLangCode=await langCodeService(text.slice(0, 199));
+    const base64Array= await cSpeechService(text,200,detectLangCode)   
+    res.json({
+      "baseString":base64Array
+    });
+  }
+  catch(e){
+    console.error(e)
+  } 
 })
 
 //free translation service

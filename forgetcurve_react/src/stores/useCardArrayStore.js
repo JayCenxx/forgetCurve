@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { cardJson } from '../assets/cardJson';
 import useLangCodeStore from './useLangCodeStore';
-import { findLanguageWithLangCode } from '../utils/LangCodeArray';
+import { findLanguageWithLangCode } from '../assets/LangCodeArray';
 
 
 

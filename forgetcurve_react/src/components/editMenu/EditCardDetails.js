@@ -79,7 +79,7 @@ export const EditCardDetails = ({ itemId, index2 }) => {
   };
  
    useEffect(()=>{
-console.log(frontLangCode,backLangCode);
+ 
    },[frontLangCode,backLangCode])
    
   //need the localFrontText & target translated language type
