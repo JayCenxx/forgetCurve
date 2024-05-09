@@ -3,6 +3,7 @@ import create from "zustand";
 import axios from "axios";
 import { fetchTTS } from "../services/fetchTTS";
 import { getCardSet, updateCardSet } from "../utils/localStorageHelpers";
+import { AudioPlayer } from "../utils/AudioPlayer";
 
 const useTTStore = create((set, get) => ({
   audio: null,
@@ -29,24 +30,28 @@ const useTTStore = create((set, get) => ({
       get().stopCurrentAudio()
 
       // use the base64 string to convert to mp3 to create an audio
-      const newAudio = new Audio(audioContent);
-
+      const newAudio = new AudioPlayer(audioContent);
+      set({ audio: newAudio });
       //for text with <200 chars
       if(isSinglePlay){
          // play the mp3
         await newAudio.play();
-        set({ audio: newAudio   });
+      
       }
       else{ 
         //this is for >200 characters  
         await new Promise((resolve, reject) => { 
+          //when the audio finsih playing it ll resolve the promise
           newAudio.onended = resolve;
+          //if the promise is reject it ll invoke the catch block
           newAudio.onerror = reject;
+          //initate the TTS
           newAudio.play();
           //duplicated code i know, but this is the code that solve the problem with multiple tts playin at the sametime
-          set({ audio: newAudio   });
+         
         });
       } 
+      
     }catch(err){
       console.error("problem at base64ToAudio",err) 
     }
@@ -70,15 +75,17 @@ const useTTStore = create((set, get) => ({
   },
   cheapSynthesizeText: async (text) => {
     try {
-      const {toAduioAndSetLastText,stopCurrentAudio}=get()
+      const {toAduioAndSetLastText,stopCurrentAudio,audio}=get()
       //if the text is empty, no need to speak it
       if (text && text.trim() !== "") {
   
-           //if same text & audio is playing, 2nd time u click the speak button, it ll stop it, 3rd time it ll play from beginning
-           if(text===get().lastText){ 
+           //1st case if same text & audio is playing, 2nd time u click the speak button  it ll stop it, 3rd time it ll play from beginning
+           //2nd case if first time click it, audio play till the end, 2nd click ll also play to the end
+           if(text===get().lastText && audio &&  audio.isCurrentlyPlaying()){ 
             stopCurrentAudio()
             //set lastText back to "" so u can play a 2nd time
-            set({lastText:""})
+            set({lastText:null})
+            console.log('hi');
             return
           } 
           //else diff Text just replace the existing one 
@@ -86,7 +93,8 @@ const useTTStore = create((set, get) => ({
         let cacheKey = `${text}`;
         let dateId = '1'; // we assume that we use dateTime coming back from database
       
-       let cardSet= getCardSet(dateId)  
+       let cardSet= getCardSet(dateId)
+      //  cardSet.clear()
         // Check if the cacheKey already exists & get the base64 string, purpose is avoid API call
         if (cardSet.has(cacheKey)) { 
            const base64=cardSet.get(cacheKey); 

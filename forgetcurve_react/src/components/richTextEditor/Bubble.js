@@ -17,7 +17,7 @@ export default function Bubble({ text }) {
   const is552Vp=useMediaQuery('(max-width: 552.33px)'); 
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [menuVisible, setMenuVisible] = useState(false);
-  const menuRef = useRef(null); // Create a ref for the hiding the bubble 
+  const menuRef = useRef(""); // Create a ref for the hiding the bubble 
   const { cheapSynthesizeText}=useTTStore()
  
 //setup media query

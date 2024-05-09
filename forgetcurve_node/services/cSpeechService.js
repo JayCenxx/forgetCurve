@@ -3,7 +3,7 @@ const { speak } = require('google-translate-api-x');
 const cSpeechService = (text, maxChunkSize, detectLangCode) => { 
     const chunks = [];
     let i = 0;
-
+//setup an hashmap mapping, if it's   'Chinese'   'Japanese'  'Korean':  'Tibetan'  'Classical Vietnamese'  'Burmese'  'Lao': 
     while (i < text.length) {
         // Determine the end of the chunk
         let end = Math.min(i + maxChunkSize, text.length);
